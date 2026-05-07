@@ -14,7 +14,7 @@ const PROJECTS = [
     color: "#18181b",
     image: "/images/projects/stackforge.png",
     github: "#",
-    demo: "#",
+    demo: "https://ai-website-builder-blue.vercel.app/",
   },
   {
     title: "Procure AI",
@@ -23,7 +23,7 @@ const PROJECTS = [
     color: "#1f1f22",
     image: "/images/projects/procureai.png",
     github: "#",
-    demo: "#",
+    demo: "https://procureai-two.vercel.app/",
   },
   {
     title: "LEET iq",
@@ -32,7 +32,7 @@ const PROJECTS = [
     color: "#27272a",
     image: "/images/projects/leetiq.png",
     github: "#",
-    demo: "#",
+    demo: "https://leet-iq.vercel.app/",
   },
   {
     title: "Dentidoco AI",
