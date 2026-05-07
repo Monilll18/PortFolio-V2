@@ -207,11 +207,11 @@ export function About() {
           />
         </div>
 
-        {/* Two-column layout — text left, Lanyard right */}
+        {/* Two-column layout — text left only */}
         <div
           style={{
             position:      "relative",
-            zIndex:        1,
+            zIndex:        2,
             width:         "100%",
             maxWidth:      "1400px",
             margin:        "0 auto",
@@ -219,10 +219,9 @@ export function About() {
             display:       "flex",
             flexDirection: "row",
             alignItems:    "center",
-            justifyContent: "space-between",
-            gap:           "6rem",
             boxSizing:     "border-box",
             marginTop:     "4rem",
+            pointerEvents: "none",
           }}
         >
           {/* LEFT COLUMN: "I Build" + scrolling list */}
@@ -233,6 +232,7 @@ export function About() {
               flexDirection: "row",
               alignItems:    "center",
               gap:           "0.25em",
+              pointerEvents: "auto",
             }}
           >
             <span
@@ -298,26 +298,27 @@ export function About() {
               </ul>
             </div>
           </div>
+        </div>
 
-          {/* RIGHT COLUMN: Lanyard */}
-          <div
-            style={{
-              flex:           "1 1 auto",
-              height:         "80vh",
-              minHeight:      "500px",
-              display:        "flex",
-              alignItems:     "center",
-              justifyContent: "center",
-            }}
-          >
-            <div style={{ width: "100%", height: "100%", position: "relative" }}>
-              <Lanyard
-                position={LANYARD_POSITION}
-                gravity={LANYARD_GRAVITY}
-                fov={15}
-                onHover={(hovering) => setTooltipText(hovering ? "Grab it" : "Swipe to see")}
-              />
-            </div>
+        {/* Lanyard — full viewport overlay so card can swing freely */}
+        <div
+          style={{
+            position:      "absolute",
+            top:           0,
+            left:          0,
+            width:         "100%",
+            height:        "100%",
+            zIndex:        1,
+            pointerEvents: "none",
+          }}
+        >
+          <div style={{ width: "100%", height: "100%", pointerEvents: "auto" }}>
+            <Lanyard
+              position={LANYARD_POSITION}
+              gravity={LANYARD_GRAVITY}
+              fov={15}
+              onHover={(hovering) => setTooltipText(hovering ? "Grab it" : "Swipe to see")}
+            />
           </div>
         </div>
       </div>

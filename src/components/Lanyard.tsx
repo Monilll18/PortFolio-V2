@@ -130,6 +130,10 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false, onHover }: BandPr
   // We want full image on front, full mirrored image on back.
   const cardGeo = useMemo(() => {
     const geo = nodes.card.geometry.clone();
+    geo.computeBoundingBox();
+    const min = geo.boundingBox.min;
+    const max = geo.boundingBox.max;
+
     const uv = geo.attributes.uv;
     let norm = geo.attributes.normal;
     if (!norm) {
@@ -138,17 +142,21 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false, onHover }: BandPr
     }
     const newUv = new Float32Array(uv.array.length);
     for (let i = 0; i < uv.count; i++) {
-      const u = uv.getX(i);
-      const v = uv.getY(i);
+      const x = geo.attributes.position.getX(i);
+      const y = geo.attributes.position.getY(i);
       const nz = norm.getZ(i);
+      
+      const u = (x - min.x) / (max.x - min.x);
+      const v = (y - min.y) / (max.y - min.y);
+      
       if (nz >= 0) {
-        // Front face — stretch UV to show full image
+        // Front face
         newUv[i * 2] = u;
-        newUv[i * 2 + 1] = v * 2;
+        newUv[i * 2 + 1] = v;
       } else {
         // Back face — full image, horizontally mirrored
         newUv[i * 2] = 1 - u;
-        newUv[i * 2 + 1] = (v - 0.5) * 2;
+        newUv[i * 2 + 1] = v;
       }
     }
     geo.setAttribute('uv', new THREE.BufferAttribute(newUv, 2));
