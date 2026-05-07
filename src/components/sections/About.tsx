@@ -28,6 +28,9 @@ const VISIBLE   = 5;
 const WINDOW_H  = ITEM_H * VISIBLE;
 const SCROLL_PX = ITEMS.length * 260;
 
+const LANYARD_POSITION: [number, number, number] = [0, 0, 20];
+const LANYARD_GRAVITY: [number, number, number] = [0, -40, 0];
+
 export function About() {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const listRef    = useRef<HTMLUListElement>(null);
@@ -220,7 +223,6 @@ export function About() {
             gap:           "6rem",
             boxSizing:     "border-box",
             marginTop:     "4rem",
-            pointerEvents: "none",
           }}
         >
           {/* LEFT COLUMN: "I Build" + scrolling list */}
@@ -231,7 +233,6 @@ export function About() {
               flexDirection: "row",
               alignItems:    "center",
               gap:           "0.25em",
-              pointerEvents: "auto",
             }}
           >
             <span
@@ -307,13 +308,12 @@ export function About() {
               display:        "flex",
               alignItems:     "center",
               justifyContent: "center",
-              pointerEvents:  "auto",
             }}
           >
             <div style={{ width: "100%", height: "100%", position: "relative" }}>
               <Lanyard
-                position={[0, 0, 20]}
-                gravity={[0, -40, 0]}
+                position={LANYARD_POSITION}
+                gravity={LANYARD_GRAVITY}
                 fov={15}
                 onHover={(hovering) => setTooltipText(hovering ? "Grab it" : "Swipe to see")}
               />
