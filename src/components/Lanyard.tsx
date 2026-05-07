@@ -147,7 +147,7 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false, onHover }: BandPr
       const nz = norm.getZ(i);
       
       const u = (x - min.x) / (max.x - min.x);
-      const v = (y - min.y) / (max.y - min.y);
+      const v = 1 - ((y - min.y) / (max.y - min.y));
       
       if (nz >= 0) {
         // Front face
