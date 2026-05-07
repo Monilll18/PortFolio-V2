@@ -174,7 +174,7 @@ export function About() {
           <DotGrid
             dotSize={2}
             gap={20}
-            baseColor="#1e1e3f"
+            baseColor="#2a2a4f"
             activeColor="#60A5FA"
             proximity={120}
             shockRadius={170}
