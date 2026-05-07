@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unknown-property */
 'use client';
-import { Suspense, useEffect, useRef, useState } from 'react';
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, extend, useFrame } from '@react-three/fiber';
 import { useGLTF, useTexture, Environment, Lightformer } from '@react-three/drei';
 import {
@@ -122,13 +122,38 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false, onHover }: BandPr
 
   const { nodes, materials } = useGLTF('/card.glb') as any;
   const texture = useTexture('/lanyard.png');
-  const cardTexture = useTexture('/images/monil.png');
+  const cardTexture = useTexture('/images/monil-pixel.png');
   cardTexture.flipY = false;
   cardTexture.colorSpace = THREE.SRGBColorSpace;
-  // Original image: 720×1600 (aspect 0.45), Card face: ~0.71 aspect
-  // Show the center 63% of height to crop black bars and center face
-  cardTexture.repeat.set(1, 0.63);
-  cardTexture.offset.set(0, 0.19);
+
+  // Remap card UVs: GLB splits image across front (top half) + back (bottom half).
+  // We want full image on front, full mirrored image on back.
+  const cardGeo = useMemo(() => {
+    const geo = nodes.card.geometry.clone();
+    const uv = geo.attributes.uv;
+    let norm = geo.attributes.normal;
+    if (!norm) {
+      geo.computeVertexNormals();
+      norm = geo.attributes.normal;
+    }
+    const newUv = new Float32Array(uv.array.length);
+    for (let i = 0; i < uv.count; i++) {
+      const u = uv.getX(i);
+      const v = uv.getY(i);
+      const nz = norm.getZ(i);
+      if (nz >= 0) {
+        // Front face — stretch UV to show full image
+        newUv[i * 2] = u;
+        newUv[i * 2 + 1] = v * 2;
+      } else {
+        // Back face — full image, horizontally mirrored
+        newUv[i * 2] = 1 - u;
+        newUv[i * 2 + 1] = (v - 0.5) * 2;
+      }
+    }
+    geo.setAttribute('uv', new THREE.BufferAttribute(newUv, 2));
+    return geo;
+  }, [nodes.card.geometry]);
   
   const [curve] = useState(
     () =>
@@ -191,7 +216,8 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false, onHover }: BandPr
 
   return (
     <>
-      <group position={[0, 4, 0]}>
+      {/* Anchor shifted right (x=3) so lanyard hangs on the right side */}
+      <group position={[3, 4, 0]}>
         <RigidBody ref={fixed} {...segmentProps} type={'fixed' as RigidBodyProps['type']} />
         <RigidBody position={[0.5, 0, 0]} ref={j1} {...segmentProps} type={'dynamic' as RigidBodyProps['type']}>
           <BallCollider args={[0.1]} />
@@ -223,7 +249,8 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false, onHover }: BandPr
               drag(new THREE.Vector3().copy(e.point).sub(vec.copy(card.current.translation())));
             }}
           >
-            <mesh geometry={nodes.card.geometry}>
+            {/* Card with remapped UVs: full image on front, mirrored on back */}
+            <mesh geometry={cardGeo}>
               <meshPhysicalMaterial
                 map={cardTexture}
                 map-anisotropy={16}
