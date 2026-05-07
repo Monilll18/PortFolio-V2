@@ -8,40 +8,40 @@ gsap.registerPlugin(ScrollTrigger);
 
 const PROJECTS = [
   {
-    title: "AI Procurement System",
-    desc: "Intelligent procurement platform with AI-powered supplier matching, three-way invoice matching, and predictive analytics for enterprise supply chain optimization.",
-    tags: ["Next.js", "FastAPI", "GPT-4", "PostgreSQL"],
+    title: "StackForge AI",
+    desc: "An AI-powered application generator that transforms plain English descriptions into production-ready code, instantly deploying full-stack architectures in under 2 minutes.",
+    tags: ["Next.js", "AI Models", "Antigravity", "Node.js"],
     color: "#18181b",
+    image: "/images/projects/stackforge.png",
+    github: "#",
+    demo: "#",
   },
   {
-    title: "Real-Time Analytics Dashboard",
-    desc: "High-performance data visualization framework processing millions of events with sub-second latency. Interactive charts, anomaly detection, and automated reporting.",
-    tags: ["React", "D3.js", "WebSocket", "Redis"],
+    title: "Procure AI",
+    desc: "An intelligent procurement platform designed for strategic sourcing. Features AI-driven purchase orders, inventory tracking, supplier portals, and a custom voice assistant for hands-free operations.",
+    tags: ["Next.js", "ElevenLabs", "Antigravity", "Clerk"],
     color: "#1f1f22",
+    image: "/images/projects/procureai.png",
+    github: "#",
+    demo: "#",
   },
   {
-    title: "AI Voice Assistant",
-    desc: "Conversational AI integration with natural language understanding, real-time speech processing, and context-aware responses for enterprise workflows.",
-    tags: ["ElevenLabs", "LangChain", "Python", "WebRTC"],
+    title: "LEET iq",
+    desc: "A real-time collaborative coding and interview platform. Featuring live video chat, synchronized code editors, and multi-language support to seamlessly run and evaluate technical interviews.",
+    tags: ["Next.js", "WebRTC", "Socket.io", "CodeMirror"],
     color: "#27272a",
+    image: "/images/projects/leetiq.png",
+    github: "#",
+    demo: "#",
   },
   {
-    title: "E-Commerce Platform",
-    desc: "Scalable marketplace with ML-powered recommendations, dynamic pricing engine, and seamless payment processing handling thousands of concurrent transactions.",
-    tags: ["Next.js", "Stripe", "TensorFlow", "MongoDB"],
+    title: "Dentidoco AI",
+    desc: "A production-ready AI-powered dental assistant that automates patient booking, voice-based scheduling, payments, and email notifications — all built with modern full-stack tools.",
+    tags: ["Next.js", "Stripe", "Vapi Voice AI", "Supabase"],
     color: "#18181b",
-  },
-  {
-    title: "Developer Portfolio",
-    desc: "Precision-crafted showcase built with cinematic animations, custom cursor physics, and pixel-perfect dark luxury aesthetic. The site you're looking at.",
-    tags: ["Next.js", "GSAP", "Framer Motion", "Lenis"],
-    color: "#1f1f22",
-  },
-  {
-    title: "Open Source Contributions",
-    desc: "Active contributions to developer tooling, UI component libraries, and AI/ML frameworks. Building tools that empower the community.",
-    tags: ["TypeScript", "Python", "Rust", "OSS"],
-    color: "#27272a",
+    image: "/images/projects/dentidoco.png",
+    github: "#",
+    demo: "#",
   },
 ];
 
@@ -174,25 +174,53 @@ export function Projects() {
                   </span>
                 ))}
               </div>
-              <div style={{ marginTop: "1rem" }}>
+              <div style={{ display: "flex", gap: "1rem", marginTop: "1rem" }}>
                 <a
-                  href="#"
+                  href={project.demo}
+                  target="_blank"
+                  rel="noreferrer"
                   style={{
                     display: "inline-flex",
                     alignItems: "center",
+                    justifyContent: "center",
                     gap: "0.5rem",
-                    fontSize: "1rem",
+                    fontSize: "0.875rem",
                     fontWeight: 600,
-                    color: "#ffffff",
+                    color: "#080810",
+                    background: "#ffffff",
+                    padding: "0.75rem 1.5rem",
+                    borderRadius: "100px",
                     textDecoration: "none",
-                    borderBottom: "1px solid #ffffff",
-                    paddingBottom: "0.25rem",
                     transition: "opacity 0.2s ease",
                   }}
-                  onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.7")}
+                  onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.9")}
                   onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
                 >
-                  View details <span>→</span>
+                  Live Demo <span>↗</span>
+                </a>
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "0.5rem",
+                    fontSize: "0.875rem",
+                    fontWeight: 600,
+                    color: "#ffffff",
+                    background: "rgba(255, 255, 255, 0.1)",
+                    border: "1px solid rgba(255, 255, 255, 0.2)",
+                    padding: "0.75rem 1.5rem",
+                    borderRadius: "100px",
+                    textDecoration: "none",
+                    transition: "background 0.2s ease",
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255, 255, 255, 0.2)")}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(255, 255, 255, 0.1)")}
+                >
+                  GitHub <span>↗</span>
                 </a>
               </div>
             </div>
@@ -213,24 +241,16 @@ export function Projects() {
                 border: "1px solid rgba(255, 255, 255, 0.05)",
               }}
             >
-              {/* Placeholder for the landing page image/content */}
-              <div
+              <img 
+                src={project.image} 
+                alt={project.title} 
                 style={{
-                  fontSize: "3rem",
-                  fontWeight: 700,
-                  opacity: 0.1,
-                  color: "#ffffff",
-                  userSelect: "none",
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  objectPosition: "top",
                 }}
-              >
-                {project.title.split(" ").map(w => w[0]).join("")}
-              </div>
-              {/* Example structural lines to make it look like a mockup */}
-              <div style={{ position: "absolute", top: "1rem", left: "1rem", right: "1rem", height: "1rem", display: "flex", gap: "0.5rem" }}>
-                <div style={{ width: "0.75rem", height: "0.75rem", borderRadius: "50%", background: "rgba(255,255,255,0.2)" }} />
-                <div style={{ width: "0.75rem", height: "0.75rem", borderRadius: "50%", background: "rgba(255,255,255,0.2)" }} />
-                <div style={{ width: "0.75rem", height: "0.75rem", borderRadius: "50%", background: "rgba(255,255,255,0.2)" }} />
-              </div>
+              />
             </div>
           </div>
         ))}
