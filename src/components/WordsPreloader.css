@@ -1,0 +1,85 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   WordsPreloader.css — Skiper8 "Words preloader" styles
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.words-preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #f5f4f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: all;
+  overflow: hidden;
+}
+
+/* SVG overlay that handles the curved exit wipe */
+.words-preloader__overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.words-preloader__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Words container — all stacked on top of each other */
+.words-preloader__words {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 1.2em;
+  z-index: 2;
+}
+
+/* Each word — absolutely positioned, revealed via clip-path */
+.words-preloader__word {
+  position: absolute;
+  font-family: "Inter", "Helvetica Neue", sans-serif;
+  font-size: clamp(3rem, 10vw, 8rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: #0a0a0a;
+  white-space: nowrap;
+  will-change: clip-path, opacity, transform;
+  line-height: 1;
+  mix-blend-mode: normal;
+}
+
+/* RTL support for Arabic */
+.words-preloader__word[lang="ar"] {
+  direction: rtl;
+}
+
+/* Counter in bottom-left corner */
+.words-preloader__counter {
+  position: absolute;
+  bottom: 3rem;
+  left: 3rem;
+  font-family: "Inter", monospace;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: rgba(10, 10, 10, 0.4);
+  letter-spacing: 0.1em;
+  z-index: 2;
+}
+
+/* Label in bottom-right corner */
+.words-preloader__label {
+  position: absolute;
+  bottom: 3rem;
+  right: 3rem;
+  font-family: "Inter", "Helvetica Neue", sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgba(10, 10, 10, 0.25);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  z-index: 2;
+}

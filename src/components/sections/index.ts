@@ -1,0 +1,9 @@
+export { Hero } from "./Hero";
+export { About } from "./About";
+export { Projects } from "./Projects";
+export { Experience } from "./Experience";
+export { BeyondCode } from "./BeyondCode";
+export { Spotlight } from "./Spotlight";
+export { Connect } from "./Connect";
+export { FAQ } from "./FAQ";
+export { Footer } from "./Footer";
