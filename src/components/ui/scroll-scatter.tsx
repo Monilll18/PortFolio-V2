@@ -45,11 +45,11 @@ export function ScrollScatter(props: ScrollScatterProps) {
 
   const scatterMultiplier = scatterDistance / 100;
 
-  const getTransition = (delay: number) => {
+  const getTransition = (delay: number): import("framer-motion").Transition => {
     if (animationEasing === "spring") {
       return { type: "spring", stiffness: 100, damping: 20, delay };
     }
-    return { type: "tween", ease: animationEasing, duration: 0.6, delay };
+    return { type: "tween", ease: animationEasing as any, duration: 0.6, delay };
   };
 
   const childrenArray = Children.toArray(children).slice(0, 8);

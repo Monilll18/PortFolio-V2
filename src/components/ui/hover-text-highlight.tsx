@@ -1,13 +1,14 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
+import { motion, Variants, Transition } from "framer-motion";
 
 interface HoverTextHighlightProps {
   text?: React.ReactNode;
   children?: React.ReactNode;
   effectColor?: string;
   wipeDirection?: "leftToRight" | "rightToLeft";
+  baseTextColor?: string;
 }
 
 export function HoverTextHighlight({
@@ -15,18 +16,19 @@ export function HoverTextHighlight({
   children,
   effectColor = "#ffffff", // Default to white
   wipeDirection = "leftToRight",
+  baseTextColor = "#ffffff",
 }: HoverTextHighlightProps) {
   const content = text || children;
   const isLeftToRight = wipeDirection === "leftToRight";
   
-  const transition = { duration: 0.3, ease: "easeInOut" };
+  const transition: Transition = { duration: 0.3, ease: "easeInOut" };
 
   const origins = {
     rest: isLeftToRight ? "bottom right" : "bottom left",
     hover: isLeftToRight ? "bottom left" : "bottom right",
   };
 
-  const wipeVariants = {
+  const wipeVariants: Variants = {
     rest: { scaleX: 0, transformOrigin: origins.rest, transition },
     hover: { scaleX: 1, transformOrigin: origins.hover, transition },
   };
@@ -56,7 +58,7 @@ export function HoverTextHighlight({
       />
       <motion.span
         variants={{
-          rest: { color: "inherit", textShadow: "none" },
+          rest: { color: baseTextColor, textShadow: "none" },
           hover: { color: "#000000", textShadow: "none" }
         }}
         transition={transition}
