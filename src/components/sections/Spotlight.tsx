@@ -1,10 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
+import { ScrollScatter } from "@/components/ui/scroll-scatter";
 
 const SPOTLIGHT_ITEMS = [
   {
@@ -46,50 +42,27 @@ const SPOTLIGHT_ITEMS = [
 ];
 
 export function Spotlight() {
-  const gridRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const cards = gsap.utils.toArray<HTMLElement>(".spotlight-card");
-      cards.forEach((card, i) => {
-        gsap.from(card, {
-          scrollTrigger: {
-            trigger: card,
-            start: "top 85%",
-            toggleActions: "play none none none",
-          },
-          opacity: 0,
-          y: 30,
-          duration: 0.5,
-          ease: "power2.out",
-          delay: i * 0.1,
-        });
-      });
-    }, gridRef);
-
-    return () => ctx.revert();
-  }, []);
 
   return (
     <section id="spotlight" className="spotlight">
-      <div ref={gridRef} className="spotlight-inner">
-        <div className="section-label">Spotlight</div>
-        <p className="spotlight-intro">
+      <div className="spotlight-inner" style={{ position: "relative", zIndex: 1, paddingBottom: 0 }}>
+        <div className="section-label" style={{ position: "relative", zIndex: 10 }}>Spotlight</div>
+        <p className="spotlight-intro" style={{ position: "relative", zIndex: 10 }}>
           Impact beyond the code — talks, writing, open source, and community.
         </p>
 
-        <div className="spotlight-grid">
+        <ScrollScatter scatterDistance={120} startScale={0.8} endScale={1} scrollStart={0.2} scrollEnd={0.8}>
           {SPOTLIGHT_ITEMS.map((item) => (
-            <div key={item.title} className="spotlight-card">
-              <div className="spotlight-card-icon">{item.icon}</div>
-              <h3 className="spotlight-card-title">{item.title}</h3>
-              <p className="spotlight-card-desc">{item.desc}</p>
-              <a href="#" className="spotlight-card-link">
+            <div key={item.title} className="spotlight-card" style={{ width: 300, background: "#fff", padding: 24, borderRadius: 16, boxShadow: "0 10px 30px rgba(0,0,0,0.05)" }}>
+              <div className="spotlight-card-icon" style={{ fontSize: "2rem", marginBottom: 16 }}>{item.icon}</div>
+              <h3 className="spotlight-card-title" style={{ fontSize: "1.2rem", marginBottom: 8, fontWeight: 600 }}>{item.title}</h3>
+              <p className="spotlight-card-desc" style={{ fontSize: "0.9rem", color: "#666", marginBottom: 16 }}>{item.desc}</p>
+              <a href="#" className="spotlight-card-link" style={{ fontWeight: 500, color: "#000" }}>
                 {item.link} →
               </a>
             </div>
           ))}
-        </div>
+        </ScrollScatter>
       </div>
     </section>
   );

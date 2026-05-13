@@ -46,8 +46,8 @@ export default function Home() {
         <Experience />
         <BeyondCode />
         <Spotlight />
-        <Connect />
         <FAQ />
+        <Connect />
         <Footer />
       </div>
     </main>

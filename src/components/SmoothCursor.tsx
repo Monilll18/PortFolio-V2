@@ -2,6 +2,7 @@
 
 import { FC, useEffect, useRef, useState } from "react"
 import { motion, useSpring } from "framer-motion"
+import { MouseTrail } from "./ui/mouse-trail"
 
 interface Position {
   x: number
@@ -168,7 +169,8 @@ export function SmoothCursor({
         return
       }
 
-      setIsVisible(true)
+      const isTarget = (e.target as Element).closest('.cursor-target') !== null;
+      setIsVisible(!isTarget);
 
       const currentPos = { x: e.clientX, y: e.clientY }
       updateVelocity(currentPos)
@@ -241,28 +243,7 @@ export function SmoothCursor({
 
   return (
     <>
-      {/* Blue glowing blur trail — follows cursor with lag */}
-      <motion.div
-        style={{
-          position: "fixed",
-          left: tailX,
-          top: tailY,
-          translateX: "-50%",
-          translateY: "-50%",
-          zIndex: 98,
-          pointerEvents: "none",
-          width: 60,
-          height: 60,
-          borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(59,130,246,0.55) 0%, rgba(59,130,246,0.2) 45%, transparent 70%)",
-          filter: "blur(8px)",
-          opacity: isVisible ? 1 : 0,
-          willChange: "transform",
-        }}
-        initial={false}
-        animate={{ opacity: isVisible ? 1 : 0 }}
-        transition={{ duration: 0.15 }}
-      />
+      <MouseTrail cursorX={cursorX} cursorY={cursorY} />
       {/* Sharp SVG cursor — snaps tightly to pointer */}
       <motion.div
         style={{

@@ -200,7 +200,21 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false, onHover }: BandPr
         z: vec.z - dragged.z
       });
     }
-    if (fixed.current) {
+    if (fixed.current && j1.current && j2.current && j3.current && card.current) {
+      const fixedT = fixed.current.translation();
+      const j1T = j1.current.translation();
+      const j2T = j2.current.translation();
+      const j3T = j3.current.translation();
+
+      if (
+        !fixedT || isNaN(fixedT.x) ||
+        !j1T || isNaN(j1T.x) ||
+        !j2T || isNaN(j2T.x) ||
+        !j3T || isNaN(j3T.x)
+      ) {
+        return;
+      }
+
       [j1, j2].forEach(ref => {
         if (!ref.current.lerped) ref.current.lerped = new THREE.Vector3().copy(ref.current.translation());
         const clampedDistance = Math.max(0.1, Math.min(1, ref.current.lerped.distanceTo(ref.current.translation())));
@@ -209,10 +223,10 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false, onHover }: BandPr
           delta * (minSpeed + clampedDistance * (maxSpeed - minSpeed))
         );
       });
-      curve.points[0].copy(j3.current.translation());
+      curve.points[0].copy(j3T);
       curve.points[1].copy(j2.current.lerped);
       curve.points[2].copy(j1.current.lerped);
-      curve.points[3].copy(fixed.current.translation());
+      curve.points[3].copy(fixedT);
       band.current.geometry.setPoints(curve.getPoints(isMobile ? 16 : 32));
       ang.copy(card.current.angvel());
       rot.copy(card.current.rotation());
@@ -225,8 +239,8 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false, onHover }: BandPr
 
   return (
     <>
-      {/* Anchor shifted right (x=3) so lanyard hangs on the right side */}
-      <group position={[3, 4, 0]}>
+      {/* Anchor shifted right so lanyard hangs on the right side, reduced x on mobile */}
+      <group position={[isMobile ? 1.5 : 3, 4, 0]}>
         <RigidBody ref={fixed} {...segmentProps} type={'fixed' as RigidBodyProps['type']} />
         <RigidBody position={[0.5, 0, 0]} ref={j1} {...segmentProps} type={'dynamic' as RigidBodyProps['type']}>
           <BallCollider args={[0.1]} />

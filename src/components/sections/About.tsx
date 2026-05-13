@@ -209,6 +209,7 @@ export function About() {
 
         {/* Two-column layout — text left only */}
         <div
+          className="about-two-column"
           style={{
             position:      "relative",
             zIndex:        2,
@@ -226,16 +227,18 @@ export function About() {
         >
           {/* LEFT COLUMN: "I Build" + scrolling list */}
           <div
+            className="about-left-col"
             style={{
               flex:          "0 1 auto",
               display:       "flex",
               flexDirection: "row",
               alignItems:    "center",
-              gap:           "0.25em",
+              gap:           "1.5em",
               pointerEvents: "auto",
             }}
           >
             <span
+              className="about-i-build"
               style={{
                 flexShrink:    0,
                 fontSize:      "clamp(2.6rem, 5vw, 4.5rem)",
@@ -283,12 +286,14 @@ export function About() {
                       display:       "flex",
                       alignItems:    "center",
                       fontSize:      "clamp(2.6rem, 5vw, 4.5rem)",
-                      fontFamily:    "var(--font-sans), Inter, sans-serif",
+                      fontFamily:    "var(--font-serif), serif",
+                      fontStyle:     "italic",
                       letterSpacing: "-0.03em",
                       lineHeight:    `${ITEM_H}px`,
                       whiteSpace:    "nowrap",
                       userSelect:    "none",
                       paddingLeft:   "0.15em",
+                      wordSpacing:   "0.15em",
                       willChange:    "opacity, filter, color",
                     }}
                   >

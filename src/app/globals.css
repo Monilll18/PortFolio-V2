@@ -1013,3 +1013,77 @@ h2 { font-size: var(--font-h2); line-height: 1.3; }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-tertiary);
 }
+
+/* ═══ RESPONSIVE OVERRIDES FOR PROJECTS & ABOUT INLINE STYLES ═══ */
+@media (max-width: 768px) {
+  /* Projects Section */
+  .projects-track {
+    flex-direction: column !important;
+    width: 100vw !important;
+    height: auto !important;
+  }
+  .project-panel {
+    width: 100vw !important;
+    height: auto !important;
+    min-height: 100vh !important;
+    flex-direction: column !important;
+    padding: 3rem 1.5rem !important;
+    gap: 2rem !important;
+    justify-content: flex-start !important;
+  }
+  .project-panel-left {
+    flex: 0 0 auto !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+  .project-panel-left h2 {
+    font-size: 2.5rem !important;
+  }
+  .project-panel-right {
+    flex: 0 0 50vh !important;
+    width: 100% !important;
+  }
+
+  /* About Section */
+  .about-two-column {
+    padding: 0 1.5rem !important;
+    justify-content: center !important;
+  }
+  .about-left-col {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+  .about-i-build {
+    font-size: 3rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+}
+
+@theme inline {
+  --animate-meteor: meteor 5s linear infinite;
+  --animate-grid: grid 15s linear infinite;
+
+  @keyframes meteor {
+    0% {
+      transform: rotate(var(--angle)) translateX(0);
+      opacity: 1;
+    }
+    70% {
+      opacity: 1;
+    }
+    100% {
+      transform: rotate(var(--angle)) translateX(-500px);
+      opacity: 0;
+    }
+  }
+
+  @keyframes grid {
+    0% {
+      transform: translateY(-50%);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+}
