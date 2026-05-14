@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect, useState, useCallback } from "react";
+import React, { useRef, useState } from "react";
 import { motion, useScroll, useTransform, useMotionValueEvent, useInView } from "motion/react";
 import { CircleCursor } from "@/components/ui/circle-cursor";
 import { RetroGrid } from "@/components/ui/retro-grid";
@@ -257,12 +257,47 @@ export function ScrollTimeline() {
       >
         <ScrollProgressIndicator progressValue={progress} />
       </motion.div>
-      <RetroGrid />
+      
+      {/* Inject animated grid background scrolling keyframes */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes timelineGridBgScroll {
+          0% { background-position: 0 0; }
+          100% { background-position: 60px 60px; }
+        }
+        .timeline-full-grid-bg {
+          animation: timelineGridBgScroll 20s linear infinite;
+        }
+      ` }} />
+      
+      {/* Complete background grid spanning the full absolute height from top:0 to bottom:0 */}
+      <div 
+        className="timeline-full-grid-bg"
+        style={{ 
+          position: "absolute", 
+          top: 0, 
+          left: 0, 
+          right: 0, 
+          bottom: 0, 
+          overflow: "hidden", 
+          zIndex: 0, 
+          pointerEvents: "none",
+          backgroundColor: "#080810",
+          backgroundImage: `
+            linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px)
+          `,
+          backgroundSize: "60px 60px",
+          // Smoothly blend the grid edges on top and bottom
+          maskImage: "linear-gradient(to bottom, transparent 0%, black 150px, black calc(100% - 150px), transparent 100%)",
+          WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 150px, black calc(100% - 150px), transparent 100%)",
+        }} 
+      />
+      
       <CircleCursor />
       {/* Inject responsive styles */}
       <style dangerouslySetInnerHTML={{ __html: TIMELINE_RESPONSIVE_CSS }} />
       
-      <div style={{ maxWidth: 900, margin: "0 auto", padding: "0 24px", position: "relative" }}>
+      <div style={{ maxWidth: 900, margin: "0 auto", padding: "0 24px", position: "relative", zIndex: 10 }}>
         {/* Section header */}
         <div style={{ textAlign: "center", marginBottom: 64 }}>
         <div

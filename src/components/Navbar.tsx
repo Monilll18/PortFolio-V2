@@ -9,7 +9,6 @@ const NAV_ITEMS = [
   { label: "Projects", href: "#projects" },
   { label: "Experience", href: "#experience" },
   { label: "About", href: "#about" },
-  { label: "Spotlight", href: "#spotlight" },
   { label: "Connect", href: "#connect" },
 ];
 
@@ -157,7 +156,9 @@ export function Navbar() {
         ))}
         <div style={{ width: "1px", height: "20px", background: "rgba(255,255,255,0.15)" }} />
         <a
-          href="#"
+          href="https://drive.google.com/file/d/1VUaWYoOHlzfcxbLtjdBqTO2nAEwV5SUw/view?usp=sharing"
+          target="_blank"
+          rel="noopener noreferrer"
           style={{
             color: "#000",
             background: "#fff",
@@ -202,7 +203,7 @@ export function Navbar() {
 
         {/* Right Side: Resume Button */}
         <div className="navbar-resume-container">
-          <a href="#" className="nav-resume">
+          <a href="https://drive.google.com/file/d/1VUaWYoOHlzfcxbLtjdBqTO2nAEwV5SUw/view?usp=sharing" target="_blank" rel="noopener noreferrer" className="nav-resume">
             Resume
           </a>
         </div>

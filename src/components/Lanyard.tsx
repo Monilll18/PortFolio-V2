@@ -117,8 +117,8 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false, onHover }: BandPr
     type: 'dynamic' as RigidBodyProps['type'],
     canSleep: true,
     colliders: false,
-    angularDamping: 4,
-    linearDamping: 4
+    angularDamping: 6,
+    linearDamping: 6
   };
 
   const { nodes, materials } = useGLTF('/card.glb') as any;
@@ -205,15 +205,34 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false, onHover }: BandPr
       const j1T = j1.current.translation();
       const j2T = j2.current.translation();
       const j3T = j3.current.translation();
+      const cardT = card.current.translation();
 
       if (
         !fixedT || isNaN(fixedT.x) ||
         !j1T || isNaN(j1T.x) ||
         !j2T || isNaN(j2T.x) ||
-        !j3T || isNaN(j3T.x)
+        !j3T || isNaN(j3T.x) ||
+        !cardT || isNaN(cardT.x)
       ) {
         return;
       }
+
+      // Clamp max segment distance to prevent band stretching across screen
+      const MAX_SEG_DIST = 3;
+      const clampSegment = (a: THREE.Vector3, b: { x: number; y: number; z: number }) => {
+        const bv = new THREE.Vector3(b.x, b.y, b.z);
+        const dist = a.distanceTo(bv);
+        if (dist > MAX_SEG_DIST) {
+          bv.sub(a).normalize().multiplyScalar(MAX_SEG_DIST).add(a);
+          return { x: bv.x, y: bv.y, z: bv.z };
+        }
+        return b;
+      };
+
+      const fixedV = new THREE.Vector3(fixedT.x, fixedT.y, fixedT.z);
+      const clampedJ1 = clampSegment(fixedV, j1T);
+      const clampedJ2 = clampSegment(new THREE.Vector3(clampedJ1.x, clampedJ1.y, clampedJ1.z), j2T);
+      const clampedJ3 = clampSegment(new THREE.Vector3(clampedJ2.x, clampedJ2.y, clampedJ2.z), j3T);
 
       [j1, j2].forEach(ref => {
         if (!ref.current.lerped) ref.current.lerped = new THREE.Vector3().copy(ref.current.translation());
@@ -223,7 +242,14 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false, onHover }: BandPr
           delta * (minSpeed + clampedDistance * (maxSpeed - minSpeed))
         );
       });
-      curve.points[0].copy(j3T);
+
+      // Clamp lerped positions too
+      const lerpedJ1 = clampSegment(fixedV, j1.current.lerped);
+      j1.current.lerped.set(lerpedJ1.x, lerpedJ1.y, lerpedJ1.z);
+      const lerpedJ2 = clampSegment(j1.current.lerped, j2.current.lerped);
+      j2.current.lerped.set(lerpedJ2.x, lerpedJ2.y, lerpedJ2.z);
+
+      curve.points[0].set(clampedJ3.x, clampedJ3.y, clampedJ3.z);
       curve.points[1].copy(j2.current.lerped);
       curve.points[2].copy(j1.current.lerped);
       curve.points[3].copy(fixedT);

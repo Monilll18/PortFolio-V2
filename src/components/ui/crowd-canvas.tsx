@@ -8,6 +8,7 @@ interface CrowdCanvasProps {
   rows?: number;
   cols?: number;
   height?: string;
+  paused?: boolean;
 }
 
 const CrowdCanvas = ({
@@ -15,8 +16,12 @@ const CrowdCanvas = ({
   rows = 15,
   cols = 7,
   height = "40%",
+  paused = false,
 }: CrowdCanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  
+  // Use a ref to store the crowd so we can access it outside the setup effect
+  const activeCrowdRef = useRef<any[]>([]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -162,6 +167,7 @@ const CrowdCanvas = ({
     const allPeeps: Peep[] = [];
     const availablePeeps: Peep[] = [];
     const crowd: Peep[] = [];
+    activeCrowdRef.current = crowd; // sync the ref
 
     const createPeeps = () => {
       const { rows, cols } = config;
@@ -260,6 +266,18 @@ const CrowdCanvas = ({
       });
     };
   }, [src, rows, cols]);
+
+  useEffect(() => {
+    activeCrowdRef.current.forEach((peep) => {
+      if (peep.walk) {
+        if (paused) {
+          peep.walk.pause();
+        } else {
+          peep.walk.resume();
+        }
+      }
+    });
+  }, [paused]);
 
   return (
     <canvas

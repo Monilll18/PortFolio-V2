@@ -44,58 +44,46 @@ export function RetroGrid({
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, w, h);
 
+      // Fill solid background
+      ctx.fillStyle = fadeColor;
+      ctx.fillRect(0, 0, w, h);
+
       ctx.save();
 
-      // Move to bottom-center and apply perspective rotation
-      ctx.translate(w / 2, h);
-      
-      // Scale Y to simulate perspective (squish vertically)
-      const perspectiveScale = 0.35;
-      ctx.scale(1, perspectiveScale);
-
-      // Draw grid lines going upward from bottom
-      const gridW = w * 3;
-      const gridH = h * 4;
-      const startX = -gridW / 2;
       const animOffset = (offset % gridSize);
 
       ctx.strokeStyle = lineColor;
       ctx.lineWidth = 1;
 
-      // Vertical lines
-      for (let x = startX; x <= gridW / 2; x += gridSize) {
+      // Draw vertical lines spanning full width/height
+      for (let x = animOffset; x <= w + gridSize; x += gridSize) {
         ctx.beginPath();
         ctx.moveTo(x, 0);
-        ctx.lineTo(x, -gridH);
+        ctx.lineTo(x, h);
         ctx.stroke();
       }
 
-      // Horizontal lines (animated - scrolling toward viewer)
-      for (let y = animOffset; y < gridH; y += gridSize) {
+      // Draw horizontal lines spanning full width/height
+      for (let y = animOffset; y <= h + gridSize; y += gridSize) {
         ctx.beginPath();
-        ctx.moveTo(startX, -y);
-        ctx.lineTo(gridW / 2, -y);
+        ctx.moveTo(0, y);
+        ctx.lineTo(w, y);
         ctx.stroke();
       }
 
       ctx.restore();
 
-      // Fade gradient from bottom (scene bg) to transparent at top
-      const grad = ctx.createLinearGradient(0, h * 0.3, 0, h);
-      grad.addColorStop(0, "transparent");
-      grad.addColorStop(0.7, fadeColor + "cc");
+      // Soft radial vignette from center to ensure high readability in the center,
+      // while maintaining grid visibility across the entire background.
+      const grad = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, Math.max(w, h) * 0.9);
+      grad.addColorStop(0, "rgba(8, 8, 16, 0)");
+      grad.addColorStop(0.8, "rgba(8, 8, 16, 0.4)");
       grad.addColorStop(1, fadeColor);
+      
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, w, h);
 
-      // Fade from top too
-      const topGrad = ctx.createLinearGradient(0, 0, 0, h * 0.25);
-      topGrad.addColorStop(0, fadeColor);
-      topGrad.addColorStop(1, "transparent");
-      ctx.fillStyle = topGrad;
-      ctx.fillRect(0, 0, w, h);
-
-      offset += 0.3;
+      offset += 0.25; // slow, ambient scroll speed
       animRef.current = requestAnimationFrame(draw);
     };
 

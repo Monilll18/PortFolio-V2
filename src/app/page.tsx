@@ -9,8 +9,7 @@ import {
   About,
   Projects,
   Experience,
-  BeyondCode,
-  Spotlight,
+  TechStack,
   Connect,
   FAQ,
   Footer,
@@ -44,9 +43,6 @@ export default function Home() {
         <About />
         <Projects />
         <Experience />
-        <BeyondCode />
-        <Spotlight />
-        <FAQ />
         <Connect />
         <Footer />
       </div>

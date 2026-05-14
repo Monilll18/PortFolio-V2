@@ -17,7 +17,7 @@ export function SlideUpButton({
   const isDark = variant === "dark";
   
   return (
-    <div style={{ display: "flex", justifyContent: "center", width: "100%" }}>
+    <div style={{ display: "inline-flex", justifyContent: "center" }}>
       <a 
         href={href}
         target="_blank"
