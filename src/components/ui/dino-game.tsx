@@ -158,6 +158,16 @@ export function DinoGame() {
           this.startListening();
           this.update();
           window.addEventListener(Runner.events.RESIZE, this.debounceResize.bind(this));
+          
+          // Set initial Game Over state to show the user it's a playable game
+          this.stop();
+          this.crashed = true;
+          this.tRex.update(100, Trex.status.CRASHED);
+          if (!this.gameOverPanel) {
+            this.gameOverPanel = new GameOverPanel(this.canvas, this.images.TEXT_SPRITE, this.images.RESTART, this.dimensions);
+          } else {
+            this.gameOverPanel.draw();
+          }
         },
         createTouchController: function() {
           this.touchController = document.createElement('div');

@@ -16,17 +16,8 @@ export function Connect() {
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
-    // Check initial theme from Framer component logic
-    const checkTheme = () => {
-      const theme = localStorage.getItem("theme");
-      const isSystemDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-      if (theme === "dark" || (!theme && isSystemDark)) {
-        setIsDark(true);
-      } else {
-        setIsDark(false);
-      }
-    };
-    checkTheme();
+    // Default to light mode (white mode) on every visit
+    setIsDark(false);
 
     // Listen for theme changes emitted by ThemeString
     const handleThemeChange = () => {
@@ -140,7 +131,7 @@ export function Connect() {
           />
           <SlideUpButton 
             title="Say Hello" 
-            href="mailto:monilll18@gmail.com" 
+            href="mailto:moniljain18112003@gmail.com" 
             variant={isDark ? "light" : "dark"}
           />
           <SlideUpButton 

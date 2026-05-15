@@ -98,9 +98,8 @@ export default function ThemeSwitchString({
   useEffect(() => {
     if (typeof window === "undefined") return;
     extractAndApplyThemeTokens();
-    const saved = localStorage.getItem("theme");
-    const sysDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-    let start = saved === "dark" || (!saved && sysDark);
+    // Always start in light mode on every visit
+    let start = false;
     setIsDark(start);
     changeTheme(start ? "dark" : "light");
   }, []);
