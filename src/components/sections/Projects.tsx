@@ -84,7 +84,7 @@ function ComparisonSlider({ beforeImage, afterImage }: { beforeImage: string, af
         </div>
       </div>
 
-      {/* Slider Handle */}
+      {/* Slider Line */}
       <div
         style={{
           position: "absolute",
@@ -92,22 +92,25 @@ function ComparisonSlider({ beforeImage, afterImage }: { beforeImage: string, af
           bottom: 0,
           left: `${sliderPosition}%`,
           width: "4px",
-          background: "white",
+          backgroundColor: "white",
           transform: "translateX(-50%)",
+          cursor: "ew-resize",
+          pointerEvents: "none",
+          boxShadow: "0 0 10px rgba(0,0,0,0.5)",
           zIndex: 10,
-          boxShadow: "0 0 20px rgba(0,0,0,0.5)",
         }}
       >
+        {/* Slider Handle */}
         <div
           style={{
             position: "absolute",
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
-            width: "40px",
-            height: "40px",
-            background: "white",
+            width: "32px",
+            height: "32px",
             borderRadius: "50%",
+            backgroundColor: "white",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -149,41 +152,49 @@ const PROJECTS = [
     tags: ["Next.js", "Gemini Pro", "Tailwind CSS", "TypeScript"],
     color: "#18181b",
     image: "/images/projects/stackforge.png",
-    link: "https://stackforge.ai",
-  },
-  {
-    title: "SIS Website Redesign",
-    desc: "A high-fidelity transformation of a legacy AI website. Improved load times by 40% and conversion by 25% through modern GSAP animations and a dark-themed premium aesthetic.",
-    tags: ["GSAP", "Three.js", "React", "Next.js"],
-    color: "#0f172a",
-    image: "/images/projects/sis-after.png",
-    imageBefore: "/images/projects/sis-before.png",
-    isComparison: true,
-    link: "https://sis.ai",
+    github: "#",
+    demo: "https://ai-website-builder-blue.vercel.app/",
   },
   {
     title: "Procure AI",
     desc: "An intelligent procurement platform designed for strategic sourcing. Features AI-driven purchase orders, inventory tracking, supplier portals, and a custom voice assistant for hands-free operations.",
     tags: ["Next.js", "ElevenLabs", "Clerk Auth", "PostgreSQL"],
     color: "#1f1f22",
-    image: "/images/projects/procure.png",
-    link: "https://procure.ai",
+    image: "/images/projects/procureai.png",
+    github: "#",
+    demo: "https://procureai-two.vercel.app/",
   },
   {
     title: "LEET iq",
-    desc: "A gamified competitive programming platform. Includes real-time battle modes, personalized skill roadmaps, and an AI tutor that helps users optimize their code for complexity.",
-    tags: ["React", "Express", "MongoDB", "Socket.io"],
+    desc: "A real-time collaborative coding and interview platform. Featuring live video chat, synchronized code editors, and multi-language support to seamlessly run and evaluate technical interviews.",
+    tags: ["Next.js", "WebRTC", "Socket.io", "Tailwind CSS"],
     color: "#27272a",
-    image: "/images/projects/leet.png",
-    link: "https://leetiq.com",
+    image: "/images/projects/leetiq.png",
+    github: "#",
+    demo: "https://leet-iq.vercel.app/",
   },
   {
-    title: "Dentidoco",
-    desc: "An AI dental assistant that provides instant answers to oral health questions, schedules appointments, and offers personalized care recommendations using custom-trained medical LLMs.",
-    tags: ["Next.js", "OpenAI", "Supabase", "Framer Motion"],
-    color: "#1c1917",
+    title: "Dentidoco AI",
+    desc: "A production-ready AI-powered dental assistant that automates patient booking, voice-based scheduling, payments, and email notifications — all built with modern full-stack tools.",
+    tags: ["Next.js", "Vapi AI", "Stripe", "Supabase"],
+    color: "#18181b",
     image: "/images/projects/dentidoco.png",
-    link: "https://dentidoco.com",
+    github: "#",
+    demo: "#",
+  },
+  {
+    title: "SIS Website Redesign",
+    desc: "An AI vs Human redesign challenge showcasing our modernized, high-converting aesthetic compared to the client's broken AI-generated layout. Drag the slider to reveal the profound impact of strategic design.",
+    tags: ["Next.js", "Framer Motion", "GSAP", "Tailwind CSS"],
+    color: "#18181b",
+    image: "/images/projects/sis-redesign-after.png",
+    imageBefore: "/images/projects/sis-redesign-before.png",
+    isComparison: true,
+    github: null,
+    demo: "https://sislanding.mohammadaman.in/",
+    demoText: "Our Redesign",
+    clientSite: "https://siswit.pages.dev/",
+    clientSiteText: "Client Site",
   },
 ];
 
@@ -192,23 +203,26 @@ export function Projects() {
   const trackRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!containerRef.current || !trackRef.current) return;
+    let ctx = gsap.context(() => {
+      let mm = gsap.matchMedia();
 
-    const ctx = gsap.context(() => {
-      const panels = gsap.utils.toArray(".project-panel");
-      
-      gsap.to(panels, {
-        xPercent: -100 * (panels.length - 1),
-        ease: "none",
-        scrollTrigger: {
-          trigger: containerRef.current,
-          pin: true,
-          scrub: 1,
-          snap: 1 / (panels.length - 1),
-          start: "top top",
-          end: () => `+=${trackRef.current?.offsetWidth}`,
-          invalidateOnRefresh: true,
-        },
+      mm.add("(min-width: 768px)", () => {
+        const track = trackRef.current;
+        if (!track) return;
+
+        const sections = gsap.utils.toArray(".project-panel");
+
+        gsap.to(sections, {
+          xPercent: -100 * (sections.length - 1),
+          ease: "none",
+          scrollTrigger: {
+            trigger: containerRef.current,
+            pin: true,
+            scrub: 1,
+            // end: () => "+=" + track.offsetWidth,
+            end: () => `+=${window.innerWidth * (sections.length - 1)}`,
+          },
+        });
       });
     }, containerRef);
 
@@ -225,12 +239,21 @@ export function Projects() {
         position: "relative",
       }}
     >
-      {/* Background Grid Scan Effect */}
-      <GridScan />
-      
-      {/* Target Cursor Effect */}
-      <TargetCursor />
-
+      <TargetCursor targetSelector=".cursor-target" parallaxOn={true} />
+      <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0, pointerEvents: 'none' }}>
+        <GridScan
+          sensitivity={0.55}
+          lineThickness={1}
+          linesColor="#1e3a8a"
+          gridScale={0.1}
+          scanColor="#60a5fa"
+          scanOpacity={0.4}
+          enablePost
+          bloomIntensity={0.6}
+          chromaticAberration={0.002}
+          noiseIntensity={0.01}
+        />
+      </div>
       <div
         ref={trackRef}
         className="projects-track"
@@ -243,106 +266,164 @@ export function Projects() {
       >
         {PROJECTS.map((project, i) => (
           <div
-            key={i}
+            key={project.title}
             className="project-panel"
             style={{
               width: "100vw",
               height: "100vh",
               display: "flex",
+              flexDirection: "row",
               alignItems: "center",
               justifyContent: "center",
-              padding: "0 10vw",
-              gap: "5vw",
-              flexShrink: 0,
+              padding: "4rem 6rem",
+              gap: "4rem",
+              boxSizing: "border-box",
             }}
           >
-            {/* Left Content */}
+            {/* Left: Project Description */}
             <div
               className="project-panel-left"
               style={{
                 flex: "0 0 35%",
                 display: "flex",
                 flexDirection: "column",
-                gap: "1.5rem",
-                color: "white",
+                gap: "2rem",
+                color: "#ffffff",
               }}
             >
-              <span style={{ 
-                fontFamily: "var(--font-fira-code)", 
-                color: "#60A5FA",
-                fontSize: "1rem",
-                fontWeight: 500,
-                letterSpacing: "0.1em"
-              }}>
-                0{i + 1} / 05
-              </span>
-              <h2 style={{ 
-                fontSize: "clamp(2.5rem, 5vw, 4.5rem)", 
-                fontWeight: 700,
-                lineHeight: 1.1,
-                letterSpacing: "-0.02em",
-                margin: 0
-              }}>
-                {project.title}
-              </h2>
-              <p style={{ 
-                fontSize: "1.125rem", 
-                lineHeight: 1.6, 
-                color: "#94a3b8",
-                maxWidth: "100%",
-                margin: 0
-              }}>
-                {project.desc}
-              </p>
-              
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
-                {project.tags.map((tag, j) => (
-                  <span
-                    key={j}
-                    style={{
-                      padding: "0.5rem 1rem",
-                      background: "rgba(255, 255, 255, 0.05)",
-                      borderRadius: "100px",
-                      fontSize: "0.875rem",
-                      color: "#cbd5e1",
-                      border: "1px solid rgba(255, 255, 255, 0.1)",
-                    }}
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-
-              <div style={{ marginTop: "1rem" }}>
-                <a
-                  href={project.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
+              <div
+                style={{
+                  background: "rgba(15, 20, 30, 0.4)",
+                  backdropFilter: "blur(16px)",
+                  WebkitBackdropFilter: "blur(16px)",
+                  border: "1px solid rgba(255, 255, 255, 0.08)",
+                  borderRadius: "24px",
+                  padding: "2.5rem",
+                  boxShadow: "0 8px 32px 0 rgba(0, 0, 0, 0.4)",
+                  marginTop: "-2.5rem", /* Offset the padding slightly */
+                  marginLeft: "-2.5rem",
+                }}
+              >
+                <div
                   style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: "0.75rem",
-                    padding: "1rem 2rem",
-                    background: "white",
-                    color: "black",
-                    borderRadius: "100px",
+                    fontSize: "0.875rem",
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    color: "#60A5FA",
                     fontWeight: 600,
-                    textDecoration: "none",
-                    transition: "transform 0.3s ease",
                   }}
-                  onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
-                  onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
                 >
-                  Live Demo
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="7" y1="17" x2="17" y2="7"></line>
-                    <polyline points="7 7 17 7 17 17"></polyline>
-                  </svg>
-                </a>
+                  0{i + 1} / 0{PROJECTS.length}
+                </div>
+                <h2
+                  className="cursor-target"
+                  style={{
+                    fontSize: "clamp(2.5rem, 4vw, 4rem)",
+                    fontWeight: 800,
+                    lineHeight: 1.1,
+                    letterSpacing: "-0.02em",
+                    fontFamily: "var(--font-sans), Inter, sans-serif",
+                    marginTop: "0.5rem",
+                    display: "inline-block"
+                  }}
+                >
+                  {project.title}
+                </h2>
+                <p
+                  className="cursor-target"
+                  style={{
+                    fontSize: "1.125rem",
+                    lineHeight: 1.6,
+                    color: "#9ca3af",
+                    fontWeight: 400,
+                    marginTop: "1.5rem"
+                  }}
+                >
+                  {project.desc}
+                </p>
+                <div
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: "0.75rem",
+                    marginTop: "1.5rem",
+                  }}
+                >
+                  {project.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="cursor-target"
+                      style={{
+                        padding: "0.5rem 1rem",
+                        borderRadius: "100px",
+                        background: "rgba(255, 255, 255, 0.05)",
+                        border: "1px solid rgba(255, 255, 255, 0.1)",
+                        fontSize: "0.875rem",
+                        color: "#e5e7eb",
+                        display: "inline-block"
+                      }}
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              <div style={{ display: "flex", gap: "1rem", marginTop: "2.5rem" }}>
+                  <a
+                    href={project.demo}
+                    className="cursor-target"
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "0.5rem",
+                      fontSize: "0.875rem",
+                      fontWeight: 600,
+                      color: "#080810",
+                      background: "#ffffff",
+                      padding: "0.75rem 1.5rem",
+                      borderRadius: "100px",
+                      textDecoration: "none",
+                      transition: "opacity 0.2s ease",
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.9")}
+                    onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+                  >
+                    {(project as any).demoText || "Live Demo"} <span>↗</span>
+                  </a>
+                  {(project as any).clientSite && (
+                    <a
+                      href={(project as any).clientSite}
+                      className="cursor-target"
+                      target="_blank"
+                      rel="noreferrer"
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: "0.5rem",
+                        fontSize: "0.875rem",
+                        fontWeight: 600,
+                        color: "#ffffff",
+                        background: "rgba(255, 255, 255, 0.1)",
+                        border: "1px solid rgba(255, 255, 255, 0.2)",
+                        padding: "0.75rem 1.5rem",
+                        borderRadius: "100px",
+                        textDecoration: "none",
+                        transition: "background 0.2s ease",
+                      }}
+                      onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(255, 255, 255, 0.2)")}
+                      onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(255, 255, 255, 0.1)")}
+                    >
+                      {(project as any).clientSiteText || "Client Site"} <span>↗</span>
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
 
-            {/* Right Mockup */}
+            {/* Right: Project Landing Page / Preview */}
             <div
               className="project-panel-right"
               style={{
