@@ -8,7 +8,7 @@ export function Footer() {
     <footer style={{
       position: "relative",
       overflow: "hidden",
-      background: "#1a1a2e",
+      backgroundColor: "#0A0A0A",
       height: "260px",
     }}>
       {/* Dino game fills entire footer as background */}
@@ -16,6 +16,8 @@ export function Footer() {
         position: "absolute",
         inset: 0,
         zIndex: 0,
+        maskImage: "linear-gradient(to bottom, transparent 0%, black 50px, black calc(100% - 50px), transparent 100%)",
+        WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 50px, black calc(100% - 50px), transparent 100%)"
       }}>
         <DinoGame />
       </div>

@@ -6,6 +6,7 @@ import { CircleCursor } from "@/components/ui/circle-cursor";
 import { RetroGrid } from "@/components/ui/retro-grid";
 import { ScrollRevealText } from "@/components/ui/scroll-reveal-text";
 import { ScrollProgressIndicator } from "@/components/ui/scroll-progress-indicator";
+import SpotlightCard from "@/components/ui/spotlight-card";
 
 /* ── Responsive CSS injected once ── */
 const TIMELINE_RESPONSIVE_CSS = `
@@ -204,22 +205,29 @@ const TimelineCard = ({
         width: "calc(50% - 48px)",
         marginLeft: side === "left" ? 0 : "auto",
         marginRight: side === "right" ? 0 : "auto",
-        padding: "28px 28px 24px",
-        borderRadius: 12,
-        background: isActive
-          ? "rgba(255, 255, 255, 0.12)"
-          : "rgba(255, 255, 255, 0.04)",
-        backdropFilter: "blur(12px)",
-        WebkitBackdropFilter: "blur(12px)",
-        border: isActive
-          ? "1px solid rgba(255, 255, 255, 0.4)"
-          : "1px solid rgba(255, 255, 255, 0.08)",
-        boxShadow: isActive
-          ? "0 0 30px rgba(255, 255, 255, 0.15), 0 8px 32px rgba(0,0,0,0.3)"
-          : "0 4px 24px rgba(0, 0, 0, 0.2)",
         marginBottom: 0,
       }}
     >
+      <SpotlightCard
+        spotlightColor={isActive ? "rgba(255, 255, 255, 0.12)" : "rgba(255, 255, 255, 0.05)"}
+        style={{
+          padding: "28px 28px 24px",
+          borderRadius: 12,
+          background: isActive
+            ? "rgba(255, 255, 255, 0.12)"
+            : "rgba(255, 255, 255, 0.04)",
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
+          border: isActive
+            ? "1px solid rgba(255, 255, 255, 0.4)"
+            : "1px solid rgba(255, 255, 255, 0.08)",
+          boxShadow: isActive
+            ? "0 0 30px rgba(255, 255, 255, 0.15), 0 8px 32px rgba(0,0,0,0.3)"
+            : "0 4px 24px rgba(0, 0, 0, 0.2)",
+          height: "100%",
+          width: "100%",
+        }}
+      >
       {/* Year badge pill */}
       <div
         style={{
@@ -288,6 +296,7 @@ const TimelineCard = ({
       >
         {entry.tag}
       </div>
+      </SpotlightCard>
     </motion.div>
   );
 };
@@ -359,7 +368,6 @@ export function ScrollTimeline() {
           pointerEvents: "none",
           backgroundColor: "#0A0A0A",
           backgroundImage: `
-            radial-gradient(ellipse at center, rgba(255, 255, 255, 0.06) 0%, transparent 60%),
             linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
             linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px)
           `,

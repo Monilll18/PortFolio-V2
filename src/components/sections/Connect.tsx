@@ -81,7 +81,7 @@ export function Connect() {
       <PixelatedCursorTrail containerRef={sectionRef} trailColor={isDark ? "#ffffff" : "#000000"} pixelSize={6} trailSpacing={12} />
       <CrowdCanvas src="/images/peeps/all-peeps.png" rows={15} cols={7} height="50%" paused={isDark} />
       
-      <div className="connect-inner" style={{ position: "relative", zIndex: 1, width: "100%", maxWidth: "900px", margin: "0 auto" }}>
+      <div className="connect-inner" style={{ position: "relative", zIndex: 10, width: "100%", maxWidth: "900px", margin: "0 auto" }}>
         <div className="reveal-text" style={{ position: "relative", marginBottom: "40px" }}>
           <div style={{ 
             fontFamily: "var(--font-script)", 
