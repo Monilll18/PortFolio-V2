@@ -31,13 +31,20 @@ export function Experience() {
           marginLeft: "-50vw",
           marginRight: "-50vw",
           overflow: "hidden",
-          background: "#080810",
+          background: "#0A0A0A",
           display: "flex",
           justifyContent: "center",
         }}
       >
-        <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, zIndex: 0 }}>
+        <div style={{ 
+          position: "absolute", 
+          top: 0, left: 0, right: 0, bottom: 0, 
+          zIndex: 0,
+          maskImage: "linear-gradient(to bottom, transparent 0%, black 150px, black calc(100% - 150px), transparent 100%)",
+          WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 150px, black calc(100% - 150px), transparent 100%)"
+        }}>
             <ShaderFlow style={{ width: "100%", height: "100%" }} />
+            <div style={{ position: "absolute", inset: 0, backgroundColor: "rgba(0,0,0,0.65)" }} />
         </div>
         <CircleCursor />
         <MacbookScroll
@@ -45,9 +52,9 @@ export function Experience() {
             <span style={{ 
               color: "#ffffff", 
               fontWeight: 800,
-              fontFamily: "var(--font-sans), Inter, sans-serif",
+              fontFamily: '"Fira Code", monospace',
               display: "inline-block",
-              mixBlendMode: "difference"
+              textShadow: "0 4px 32px rgba(0,0,0,0.9), 0 2px 8px rgba(0,0,0,0.8)"
             }}>
               <HoverTextHighlight effectColor="#ffffff">Life is a Journey</HoverTextHighlight> <br />
               <HoverTextHighlight effectColor="#ffffff">Experiences define our path.</HoverTextHighlight>

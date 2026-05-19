@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { gsap } from "gsap";
+import { motion } from "framer-motion";
 import GooeyNav from "./GooeyNav";
 
 const NAV_ITEMS = [
@@ -16,7 +16,6 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const navRef = useRef<HTMLElement>(null);
   const heroThreshold = useRef(0);
 
   useEffect(() => {
@@ -61,153 +60,188 @@ export function Navbar() {
     if (el) el.scrollIntoView({ behavior: "smooth" });
   };
 
-  const handleIslandClick = () => {
-    setMenuOpen(true);
-  };
-
-  // ── Floating island mode ─────────────────────────────────
-  if (collapsed && !menuOpen) {
-    return (
-      <nav
-        ref={navRef}
-        className="navbar-island"
-        onClick={handleIslandClick}
-        style={{
-          position: "fixed",
-          top: "24px",
-          left: "50%",
-          transform: "translateX(-50%)",
-          zIndex: 1000,
-          width: "16px",
-          height: "16px",
-          borderRadius: "50%",
-          background: "#fff",
-          cursor: "pointer",
-          transition: "all 0.5s cubic-bezier(0.23, 1, 0.32, 1)",
-          boxShadow: "0 0 20px 4px rgba(255,255,255,0.15), 0 0 60px 8px rgba(255,255,255,0.05)",
+  return (
+    <div style={{ position: "fixed", top: 0, left: 0, width: "100%", zIndex: 1000, display: "flex", justifyContent: "center", pointerEvents: "none" }}>
+      <motion.nav
+        layout
+        onClick={() => {
+          if (collapsed && !menuOpen) setMenuOpen(true);
         }}
-      />
-    );
-  }
-
-  // ── Expanded island (after tap) ──────────────────────────
-  if (collapsed && menuOpen) {
-    return (
-      <nav
-        ref={navRef}
-        onMouseLeave={() => setMenuOpen(false)}
-        className="navbar-island-expanded"
+        onMouseLeave={() => {
+          if (collapsed && menuOpen) setMenuOpen(false);
+        }}
         style={{
-          position: "fixed",
-          top: "16px",
-          left: "50%",
-          transform: "translateX(-50%)",
-          zIndex: 1000,
-          background: "rgba(0,0,0,0.85)",
+          pointerEvents: "auto",
+          cursor: collapsed && !menuOpen ? "pointer" : "default",
+          overflow: "hidden",
           backdropFilter: "blur(20px)",
           WebkitBackdropFilter: "blur(20px)",
-          borderRadius: "9999px",
-          padding: "12px 32px",
           display: "flex",
+          justifyContent: "center",
           alignItems: "center",
-          gap: "2rem",
-          transition: "all 0.5s cubic-bezier(0.23, 1, 0.32, 1)",
-          boxShadow: "0 8px 32px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.08)",
+          position: "relative",
         }}
+        initial={false}
+        animate={{
+          y: collapsed && !menuOpen ? 24 : collapsed && menuOpen ? 16 : scrolled ? 12 : 16,
+          borderRadius: 9999,
+          // Always keep the parent background dark to prevent the ugly white color interpolation flash
+          background: collapsed && menuOpen 
+            ? "rgba(0,0,0,0.85)" 
+            : scrolled 
+              ? "rgba(5, 5, 5, 0.7)" 
+              : "rgba(10, 10, 10, 0.45)",
+          boxShadow: collapsed && !menuOpen 
+            ? "0 0 20px 4px rgba(255,255,255,0.15), 0 0 60px 8px rgba(255,255,255,0.05)"
+            : collapsed && menuOpen
+              ? "0 8px 32px rgba(0,0,0,0.4)"
+              : scrolled
+                ? "0 12px 40px 0 rgba(0, 0, 0, 0.5)"
+                : "0 8px 32px 0 rgba(0, 0, 0, 0.3)",
+          border: collapsed && !menuOpen 
+            ? "1px solid rgba(255, 255, 255, 0)" 
+            : collapsed && menuOpen 
+              ? "1px solid rgba(255, 255, 255, 0.08)"
+              : scrolled
+                ? "1px solid rgba(255, 255, 255, 0.12)"
+                : "1px solid rgba(255, 255, 255, 0.08)"
+        }}
+        transition={{ type: "spring", bounce: 0.15, duration: 0.6 }}
       >
-        <a
-          href="#hero"
-          onClick={() => handleNavClick("#hero")}
+        {/* State 1: Collapsed Dot */}
+        <motion.div
+          layout
+          animate={{ opacity: collapsed && !menuOpen ? 1 : 0 }}
+          transition={{ duration: 0.15 }}
           style={{
-            color: "#fff",
-            fontFamily: "var(--font-sans), Inter, sans-serif",
-            fontWeight: 600,
-            fontStyle: "italic",
-            fontSize: "1.1rem",
-            letterSpacing: "-0.02em",
-            textDecoration: "none",
-            whiteSpace: "nowrap",
+            position: collapsed && !menuOpen ? "relative" : "absolute",
+            width: 16,
+            height: 16,
+            background: "#fff", // White dot is contained inside, fades out instantly
+            borderRadius: 9999,
           }}
-        >
-          Monil
-        </a>
-        <div style={{ width: "1px", height: "20px", background: "rgba(255,255,255,0.15)" }} />
-        {NAV_ITEMS.map((item) => (
-          <a
-            key={item.label}
-            href={item.href}
-            onClick={(e) => {
-              e.preventDefault();
-              handleNavClick(item.href);
-            }}
-            style={{
-              color: "rgba(255,255,255,0.7)",
-              fontSize: "0.875rem",
-              fontWeight: 500,
-              textDecoration: "none",
-              whiteSpace: "nowrap",
-              transition: "color 0.2s ease",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "#fff")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.7)")}
-          >
-            {item.label}
-          </a>
-        ))}
-        <div style={{ width: "1px", height: "20px", background: "rgba(255,255,255,0.15)" }} />
-        <a
-          href="https://drive.google.com/file/d/1VUaWYoOHlzfcxbLtjdBqTO2nAEwV5SUw/view?usp=sharing"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            color: "#000",
-            background: "#fff",
-            fontSize: "0.8rem",
-            fontWeight: 600,
-            textDecoration: "none",
-            padding: "6px 16px",
-            borderRadius: "9999px",
-            whiteSpace: "nowrap",
-          }}
-        >
-          Resume
-        </a>
-      </nav>
-    );
-  }
+        />
 
-  // ── Normal full navbar (hero section) ────────────────────
-  return (
-    <nav ref={navRef} className={`navbar ${scrolled ? "scrolled" : ""}`}>
-      <div className="navbar-inner">
-        {/* Left Side: Logo */}
-        <div className="navbar-logo-container">
-          <a href="#hero" className="navbar-logo" onClick={() => handleNavClick("#hero")}>
+        {/* State 2: Expanded Island */}
+        <motion.div
+          layout
+          animate={{ 
+            opacity: collapsed && menuOpen ? 1 : 0, 
+            pointerEvents: collapsed && menuOpen ? "auto" : "none" 
+          }}
+          transition={{ duration: 0.2 }}
+          style={{
+            position: collapsed && menuOpen ? "relative" : "absolute",
+            height: 56,
+            padding: "0 32px",
+            display: "flex",
+            alignItems: "center",
+            gap: "2rem",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {/* Expanded Links */}
+          <a
+            href="#hero"
+            onClick={(e) => { e.preventDefault(); handleNavClick("#hero"); }}
+            style={{
+              color: "#fff",
+              fontFamily: "var(--font-sans), Inter, sans-serif",
+              fontWeight: 600,
+              fontStyle: "italic",
+              fontSize: "1.1rem",
+              letterSpacing: "-0.02em",
+              textDecoration: "none",
+            }}
+          >
             Monil
           </a>
-        </div>
-
-        {/* Center: GooeyNav */}
-        <div className="navbar-center-container">
-          <GooeyNav
-            items={NAV_ITEMS}
-            particleCount={15}
-            particleDistances={[60, 10]}
-            particleR={80}
-            initialActiveIndex={0}
-            animationTime={600}
-            timeVariance={300}
-            colors={[1, 2, 3, 1, 2, 3, 1, 4]}
-          />
-        </div>
-
-        {/* Right Side: Resume Button */}
-        <div className="navbar-resume-container">
-          <a href="https://drive.google.com/file/d/1VUaWYoOHlzfcxbLtjdBqTO2nAEwV5SUw/view?usp=sharing" target="_blank" rel="noopener noreferrer" className="nav-resume">
+          <div style={{ width: "1px", height: "20px", background: "rgba(255,255,255,0.15)" }} />
+          {NAV_ITEMS.map((item) => (
+            <a
+              key={item.label}
+              href={item.href}
+              onClick={(e) => {
+                e.preventDefault();
+                handleNavClick(item.href);
+              }}
+              style={{
+                color: "rgba(255,255,255,0.7)",
+                fontSize: "0.875rem",
+                fontWeight: 500,
+                textDecoration: "none",
+                transition: "color 0.2s ease",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "#fff")}
+              onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.7)")}
+            >
+              {item.label}
+            </a>
+          ))}
+          <div style={{ width: "1px", height: "20px", background: "rgba(255,255,255,0.15)" }} />
+          <a
+            href="https://drive.google.com/file/d/1VUaWYoOHlzfcxbLtjdBqTO2nAEwV5SUw/view?usp=sharing"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              color: "#000",
+              background: "#fff",
+              fontSize: "0.8rem",
+              fontWeight: 600,
+              textDecoration: "none",
+              padding: "6px 16px",
+              borderRadius: "9999px",
+            }}
+          >
             Resume
           </a>
-        </div>
-      </div>
-    </nav>
+        </motion.div>
+
+        {/* State 3: Full Navbar */}
+        <motion.div
+          layout
+          animate={{ 
+            opacity: !collapsed ? 1 : 0, 
+            pointerEvents: !collapsed ? "auto" : "none" 
+          }}
+          transition={{ duration: 0.2 }}
+          style={{
+            position: !collapsed ? "relative" : "absolute",
+            width: "90vw",
+            maxWidth: 1200,
+            height: 64,
+            padding: "0 28px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <div className="navbar-logo-container">
+            <a href="#hero" className="navbar-logo" onClick={(e) => { e.preventDefault(); handleNavClick("#hero"); }}>
+              Monil
+            </a>
+          </div>
+
+          <div className="navbar-center-container">
+            <GooeyNav
+              items={NAV_ITEMS}
+              particleCount={15}
+              particleDistances={[60, 10]}
+              particleR={80}
+              initialActiveIndex={0}
+              animationTime={600}
+              timeVariance={300}
+              colors={[1, 2, 3, 1, 2, 3, 1, 4]}
+            />
+          </div>
+
+          <div className="navbar-resume-container">
+            <a href="https://drive.google.com/file/d/1VUaWYoOHlzfcxbLtjdBqTO2nAEwV5SUw/view?usp=sharing" target="_blank" rel="noopener noreferrer" className="nav-resume">
+              Resume
+            </a>
+          </div>
+        </motion.div>
+      </motion.nav>
+    </div>
   );
 }

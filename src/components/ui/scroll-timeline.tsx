@@ -9,6 +9,20 @@ import { ScrollProgressIndicator } from "@/components/ui/scroll-progress-indicat
 
 /* ── Responsive CSS injected once ── */
 const TIMELINE_RESPONSIVE_CSS = `
+@keyframes timelinePing {
+  0% { transform: translate(-50%, -50%) scale(1); opacity: 1; border-width: 2px; }
+  100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; border-width: 1px; }
+}
+@keyframes timelineConfetti {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) translate(0, 0) scale(1) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) translate(var(--c-x), var(--c-y)) scale(0.3) rotate(360deg);
+  }
+}
 @media (max-width: 768px) {
   .stl-track { left: 20px !important; transform: none !important; }
   .stl-dot  { left: 20px !important; }
@@ -75,39 +89,95 @@ const TimelineDot = ({ progress, index, total, active }: { progress: number; ind
   const reached = progress >= threshold - 0.02;
   const scale = reached ? 1.35 : 1;
   const bg = active
-    ? "rgb(34, 197, 94)"
+    ? "#ffffff"
     : reached
     ? "#ffffff"
     : "rgba(255,255,255,0.25)";
   const border = active
-    ? "2px solid rgba(34, 197, 94, 0.6)"
+    ? "2px solid rgba(255, 255, 255, 0.8)"
     : reached
     ? "2px solid rgba(255, 255, 255, 0.7)"
     : "2px solid rgba(255,255,255,0.15)";
   const glow = active
-    ? "0 0 18px rgba(34, 197, 94, 0.6), 0 0 40px rgba(34, 197, 94, 0.25)"
+    ? "0 0 18px rgba(255, 255, 255, 0.6), 0 0 40px rgba(255, 255, 255, 0.25)"
     : reached
     ? "0 0 10px rgba(255, 255, 255, 0.5)"
     : "none";
 
+  const isLast = index === total - 1;
+
   return (
-    <div
-      className="stl-dot"
-      style={{
-        position: "absolute",
-        left: "50%",
-        top: `${threshold * 100}%`,
-        transform: `translate(-50%, -50%) scale(${scale})`,
-        width: 16,
-        height: 16,
-        borderRadius: "50%",
-        background: bg,
-        border: border,
-        boxShadow: glow,
-        zIndex: 5,
-        transition: "all 0.5s cubic-bezier(0.22, 1, 0.36, 1)",
-      }}
-    />
+    <>
+      <div
+        className="stl-dot"
+        style={{
+          position: "absolute",
+          left: "50%",
+          top: `${threshold * 100}%`,
+          transform: `translate(-50%, -50%) scale(${scale})`,
+          width: 16,
+          height: 16,
+          borderRadius: "50%",
+          background: bg,
+          border: border,
+          boxShadow: glow,
+          zIndex: 5,
+          transition: "all 0.5s cubic-bezier(0.22, 1, 0.36, 1)",
+        }}
+      />
+      {reached && (
+        <div
+          style={{
+            position: "absolute",
+            left: "50%",
+            top: `${threshold * 100}%`,
+            width: 16,
+            height: 16,
+            borderRadius: "50%",
+            border: "2px solid #fff",
+            animation: "timelinePing 1s cubic-bezier(0, 0, 0.2, 1) forwards",
+            zIndex: 4,
+            pointerEvents: "none",
+          }}
+        />
+      )}
+      {isLast && reached && (
+        <div style={{ position: "absolute", left: "50%", top: `${threshold * 100}%`, pointerEvents: "none", zIndex: 10 }}>
+          {Array.from({ length: 16 }).map((_, i) => {
+            const angle = (i / 16) * Math.PI * 2 + Math.random() * 0.25;
+            const distance = 25 + Math.random() * 35;
+            const x = Math.cos(angle) * distance;
+            const y = Math.sin(angle) * distance;
+            const delay = Math.random() * 0.08;
+            const size = 3 + Math.random() * 4;
+            const colors = ["#ffffff", "#f8fafc", "#cbd5e1", "#e2e8f0", "#94a3b8"];
+            const color = colors[i % colors.length];
+            return (
+              <div
+                key={i}
+                style={
+                  {
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: size,
+                    height: size,
+                    borderRadius: i % 2 === 0 ? "50%" : "0%",
+                    background: color,
+                    transform: "translate(-50%, -50%)",
+                    animation: `timelineConfetti 1.2s cubic-bezier(0.1, 0.8, 0.3, 1) forwards`,
+                    animationDelay: `${delay}s`,
+                    opacity: 0,
+                    "--c-x": `${x}px`,
+                    "--c-y": `${y}px`,
+                  } as React.CSSProperties
+                }
+              />
+            );
+          })}
+        </div>
+      )}
+    </>
   );
 };
 
@@ -137,15 +207,15 @@ const TimelineCard = ({
         padding: "28px 28px 24px",
         borderRadius: 12,
         background: isActive
-          ? "rgba(34, 197, 94, 0.08)"
+          ? "rgba(255, 255, 255, 0.12)"
           : "rgba(255, 255, 255, 0.04)",
         backdropFilter: "blur(12px)",
         WebkitBackdropFilter: "blur(12px)",
         border: isActive
-          ? "1px solid rgba(34, 197, 94, 0.3)"
+          ? "1px solid rgba(255, 255, 255, 0.4)"
           : "1px solid rgba(255, 255, 255, 0.08)",
         boxShadow: isActive
-          ? "0 0 30px rgba(34, 197, 94, 0.15), 0 8px 32px rgba(0,0,0,0.3)"
+          ? "0 0 30px rgba(255, 255, 255, 0.15), 0 8px 32px rgba(0,0,0,0.3)"
           : "0 4px 24px rgba(0, 0, 0, 0.2)",
         marginBottom: 0,
       }}
@@ -160,11 +230,11 @@ const TimelineCard = ({
           fontWeight: 600,
           letterSpacing: "0.04em",
           background: isActive
-            ? "rgba(34, 197, 94, 0.25)"
+            ? "rgba(255, 255, 255, 0.25)"
             : "rgba(255, 255, 255, 0.08)",
-          color: isActive ? "#86efac" : "rgba(255,255,255,0.55)",
+          color: isActive ? "#ffffff" : "rgba(255,255,255,0.55)",
           border: isActive
-            ? "1px solid rgba(34, 197, 94, 0.4)"
+            ? "1px solid rgba(255, 255, 255, 0.5)"
             : "1px solid rgba(255,255,255,0.1)",
           marginBottom: 16,
         }}
@@ -177,7 +247,7 @@ const TimelineCard = ({
         style={{
           fontSize: "1.35rem",
           fontWeight: 600,
-          color: isActive ? "#dcfce7" : "#ffffff",
+          color: isActive ? "#ffffff" : "#ffffff",
           letterSpacing: "-0.02em",
           marginBottom: 10,
           lineHeight: 1.3,
@@ -202,7 +272,7 @@ const TimelineCard = ({
       <div
         style={{
           fontSize: "0.8rem",
-          color: isActive ? "#86efac" : "rgba(255,255,255,0.35)",
+          color: isActive ? "#ffffff" : "rgba(255,255,255,0.35)",
           fontWeight: 500,
           letterSpacing: "0.02em",
           ...(isActive
@@ -210,8 +280,8 @@ const TimelineCard = ({
                 display: "inline-block",
                 padding: "4px 12px",
                 borderRadius: 8,
-                background: "rgba(34, 197, 94, 0.12)",
-                border: "1px solid rgba(34, 197, 94, 0.25)",
+                background: "rgba(255, 255, 255, 0.15)",
+                border: "1px solid rgba(255, 255, 255, 0.3)",
               }
             : {}),
         }}
@@ -255,7 +325,13 @@ export function ScrollTimeline() {
         transition={{ duration: 0.4, ease: "easeOut" }}
         style={{ position: "fixed", top: 0, left: 0, width: "100%", zIndex: 100, pointerEvents: "none" }}
       >
-        <ScrollProgressIndicator progressValue={progress} />
+        <ScrollProgressIndicator 
+          progressValue={progress} 
+          fillType="solid"
+          solidColor="#ffffff"
+          gradientStart="#ffffff"
+          gradientEnd="#ffffff"
+        />
       </motion.div>
       
       {/* Inject animated grid background scrolling keyframes */}
@@ -281,8 +357,9 @@ export function ScrollTimeline() {
           overflow: "hidden", 
           zIndex: 0, 
           pointerEvents: "none",
-          backgroundColor: "#080810",
+          backgroundColor: "#0A0A0A",
           backgroundImage: `
+            radial-gradient(ellipse at center, rgba(255, 255, 255, 0.06) 0%, transparent 60%),
             linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
             linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px)
           `,

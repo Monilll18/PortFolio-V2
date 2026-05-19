@@ -235,18 +235,28 @@ export function Projects() {
       ref={containerRef}
       style={{
         overflow: "hidden",
-        backgroundColor: "#080810",
+        backgroundColor: "#0A0A0A",
         position: "relative",
       }}
     >
       <TargetCursor targetSelector=".cursor-target" parallaxOn={true} />
-      <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0, pointerEvents: 'none' }}>
+      <div style={{ 
+        position: 'absolute', 
+        top: 0, 
+        left: 0, 
+        width: '100%', 
+        height: '100%', 
+        zIndex: 0, 
+        pointerEvents: 'none',
+        maskImage: "linear-gradient(to bottom, transparent 0%, black 150px, black calc(100% - 150px), transparent 100%)",
+        WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 150px, black calc(100% - 150px), transparent 100%)"
+      }}>
         <GridScan
           sensitivity={0.55}
           lineThickness={1}
-          linesColor="#1e3a8a"
+          linesColor="#333333"
           gridScale={0.1}
-          scanColor="#60a5fa"
+          scanColor="#ffffff"
           scanOpacity={0.4}
           enablePost
           bloomIntensity={0.6}
@@ -254,6 +264,7 @@ export function Projects() {
           noiseIntensity={0.01}
         />
       </div>
+      <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1, pointerEvents: 'none', backdropFilter: 'blur(8px)', backgroundColor: 'rgba(10,10,10,0.35)' }} />
       <div
         ref={trackRef}
         className="projects-track"
@@ -262,6 +273,8 @@ export function Projects() {
           width: `${PROJECTS.length * 100}vw`,
           height: "100vh",
           willChange: "transform",
+          position: "relative",
+          zIndex: 10,
         }}
       >
         {PROJECTS.map((project, i) => (
@@ -293,13 +306,13 @@ export function Projects() {
             >
               <div
                 style={{
-                  background: "rgba(15, 20, 30, 0.4)",
-                  backdropFilter: "blur(16px)",
-                  WebkitBackdropFilter: "blur(16px)",
-                  border: "1px solid rgba(255, 255, 255, 0.08)",
+                  background: "rgba(20, 20, 20, 0.75)",
+                  backdropFilter: "blur(24px)",
+                  WebkitBackdropFilter: "blur(24px)",
+                  border: "1px solid rgba(255, 255, 255, 0.15)",
                   borderRadius: "24px",
                   padding: "2.5rem",
-                  boxShadow: "0 8px 32px 0 rgba(0, 0, 0, 0.4)",
+                  boxShadow: "0 12px 48px 0 rgba(0, 0, 0, 0.6)",
                   marginTop: "-2.5rem", /* Offset the padding slightly */
                   marginLeft: "-2.5rem",
                 }}
@@ -309,7 +322,7 @@ export function Projects() {
                     fontSize: "0.875rem",
                     letterSpacing: "0.1em",
                     textTransform: "uppercase",
-                    color: "#60A5FA",
+                    color: "#FFFFFF",
                     fontWeight: 600,
                   }}
                 >
@@ -334,7 +347,7 @@ export function Projects() {
                   style={{
                     fontSize: "1.125rem",
                     lineHeight: 1.6,
-                    color: "#9ca3af",
+                    color: "#e5e7eb",
                     fontWeight: 400,
                     marginTop: "1.5rem"
                   }}
@@ -356,8 +369,8 @@ export function Projects() {
                       style={{
                         padding: "0.5rem 1rem",
                         borderRadius: "100px",
-                        background: "rgba(255, 255, 255, 0.05)",
-                        border: "1px solid rgba(255, 255, 255, 0.1)",
+                        background: "rgba(255, 255, 255, 0.15)",
+                        border: "1px solid rgba(255, 255, 255, 0.25)",
                         fontSize: "0.875rem",
                         color: "#e5e7eb",
                         display: "inline-block"
@@ -436,8 +449,8 @@ export function Projects() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
-                border: "1px solid rgba(255, 255, 255, 0.05)",
+                boxShadow: "0 0 120px rgba(255, 255, 255, 0.15), 0 25px 50px -12px rgba(0, 0, 0, 0.8)",
+                border: "1px solid rgba(255, 255, 255, 0.15)",
               }}
             >
               {(project as any).isComparison ? (

@@ -33,7 +33,7 @@ export const MouseTrail = ({ cursorX, cursorY }: MouseTrailProps) => {
     // Trail config
     const trailLength = 30;
     const lineWidth = 3.5;
-    const color = { r: 59, g: 130, b: 246 }; // blue
+    const color = { r: 255, g: 255, b: 255 }; // white
     const fadeDuration = 0.6;
     const minDist = 2; // minimum distance between points to avoid clumping
 

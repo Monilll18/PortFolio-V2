@@ -63,7 +63,7 @@ export function Connect() {
       style={{ 
         position: "relative", 
         overflow: "hidden", 
-        background: isDark ? "#000000" : "#ffffff", 
+        background: isDark ? "#0A0A0A" : "#ffffff", 
         color: isDark ? "#ffffff" : "#000000",
         minHeight: "100vh",
         display: "flex",

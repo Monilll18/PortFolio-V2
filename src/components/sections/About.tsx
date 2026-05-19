@@ -164,18 +164,25 @@ export function About() {
           top:        0,
           height:     "100vh",
           width:      "100%",
-          background: "#080810",
+          background: "#0A0A0A",
           display:    "flex",
           alignItems: "center",
         }}
       >
         {/* DotGrid background */}
-        <div aria-hidden="true" style={{ position: "absolute", inset: 0, zIndex: 0, pointerEvents: "none" }}>
+        <div aria-hidden="true" style={{ 
+          position: "absolute", 
+          inset: 0, 
+          zIndex: 0, 
+          pointerEvents: "none",
+          maskImage: "linear-gradient(to bottom, transparent 0%, black 150px, black calc(100% - 150px), transparent 100%)",
+          WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 150px, black calc(100% - 150px), transparent 100%)"
+        }}>
           <DotGrid
             dotSize={2}
             gap={20}
-            baseColor="#2a2a4f"
-            activeColor="#60A5FA"
+            baseColor="#333333"
+            activeColor="#FFFFFF"
             proximity={120}
             shockRadius={170}
             shockStrength={10}
@@ -194,6 +201,7 @@ export function About() {
             transform: "translateX(-50%)",
             zIndex: 2,
             pointerEvents: "auto",
+            textShadow: "0 4px 24px rgba(0,0,0,0.8), 0 0 40px rgba(255,255,255,0.3)"
           }}
         >
           <VariableProximity
@@ -285,14 +293,14 @@ export function About() {
                       height:        `${ITEM_H}px`,
                       display:       "flex",
                       alignItems:    "center",
-                      fontSize:      "clamp(2.6rem, 5vw, 4.5rem)",
+                      fontSize:      "clamp(1.5rem, 5vw, 4.5rem)",
                       fontFamily:    "var(--font-serif), serif",
                       fontStyle:     "italic",
                       letterSpacing: "-0.03em",
                       lineHeight:    `${ITEM_H}px`,
                       whiteSpace:    "nowrap",
                       userSelect:    "none",
-                      paddingLeft:   "0.15em",
+                      paddingLeft:   "0",
                       wordSpacing:   "0.15em",
                       willChange:    "opacity, filter, color",
                     }}
