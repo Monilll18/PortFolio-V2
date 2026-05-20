@@ -22,16 +22,27 @@ export const MacbookScroll = ({
   });
 
   const [isMobile, setIsMobile] = useState(false);
+  const [macScale, setMacScale] = useState(1);
 
   useEffect(() => {
-    if (window && window.innerWidth < 768) {
-      setIsMobile(true);
-    }
+    const calculate = () => {
+      const vw = window.innerWidth;
+      setIsMobile(vw < 768);
+      // Fluid scale for MacBook visual
+      if (vw >= 1400) setMacScale(1);
+      else if (vw >= 1100) setMacScale(0.85);
+      else if (vw >= 900) setMacScale(0.72);
+      else if (vw >= 768) setMacScale(0.6);
+      else setMacScale(0.45);
+    };
+    calculate();
+    window.addEventListener('resize', calculate);
+    return () => window.removeEventListener('resize', calculate);
   }, []);
 
   const scaleX = useTransform(scrollYProgress, [0, 0.3], [1.2, isMobile ? 1 : 1.5]);
   const scaleY = useTransform(scrollYProgress, [0, 0.3], [0.6, isMobile ? 1 : 1.5]);
-  const translate = useTransform(scrollYProgress, [0, 0.5], [0, 800]);
+  const translate = useTransform(scrollYProgress, [0, 0.5], [0, isMobile ? 400 : 800 * macScale]);
   const rotate = useTransform(scrollYProgress, [0.1, 0.12, 0.3], [-28, -28, 0]);
   const textTransform = useTransform(scrollYProgress, [0, 0.3], [0, 100]);
   const textOpacity = useTransform(scrollYProgress, [0, 0.15], [1, 1]);
@@ -41,13 +52,12 @@ export const MacbookScroll = ({
       ref={ref}
       style={{
         display: "flex",
-        minHeight: "200vh",
+        minHeight: isMobile ? "180vh" : "200vh",
         flexShrink: 0,
-        transform: isMobile ? "scale(0.35)" : "scale(1)",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "flex-start",
-        paddingTop: isMobile ? 0 : "20rem",
+        paddingTop: isMobile ? "2rem" : "clamp(8rem, 15vw, 20rem)",
         paddingBottom: isMobile ? 0 : "5rem",
         perspective: "800px",
       }}
@@ -89,10 +99,12 @@ export const MacbookScroll = ({
           position: "relative",
           zIndex: -1,
           height: "22rem",
-          width: "32rem",
+          width: "clamp(20rem, 40vw, 32rem)",
           overflow: "hidden",
           borderRadius: "1rem",
           backgroundColor: "#272729",
+          transform: `scale(${macScale})`,
+          transformOrigin: "top center",
         }}
       >
         {/* above keyboard bar */}
@@ -183,7 +195,7 @@ export const Lid = ({
           transformStyle: "preserve-3d",
           position: "relative",
           height: "12rem",
-          width: "32rem",
+          width: "clamp(20rem, 40vw, 32rem)",
           borderRadius: "1rem",
           backgroundColor: "#010101",
           padding: "0.5rem",
@@ -215,7 +227,7 @@ export const Lid = ({
           position: "absolute",
           inset: 0,
           height: "24rem",
-          width: "32rem",
+          width: "clamp(20rem, 40vw, 32rem)",
           borderRadius: "1rem",
           backgroundColor: "#010101",
           padding: "0.5rem",
@@ -415,4 +427,3 @@ export const SpeakerGrid = () => {
 };
 
 /* ── Apple-style Logo ── */
-

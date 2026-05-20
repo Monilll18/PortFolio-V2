@@ -25,9 +25,9 @@ const TIMELINE_RESPONSIVE_CSS = `
   }
 }
 @media (max-width: 768px) {
-  .stl-track { left: 20px !important; transform: none !important; }
-  .stl-dot  { left: 20px !important; }
-  .stl-card { width: 100% !important; margin-left: 48px !important; margin-right: 0 !important; }
+  .stl-track { left: 16px !important; transform: none !important; }
+  .stl-dot  { left: 16px !important; }
+  .stl-card { width: calc(100% - 44px) !important; margin-left: 40px !important; margin-right: 0 !important; }
 }
 `;
 
@@ -209,21 +209,21 @@ const TimelineCard = ({
       }}
     >
       <SpotlightCard
-        spotlightColor={isActive ? "rgba(255, 255, 255, 0.12)" : "rgba(255, 255, 255, 0.05)"}
+        spotlightColor={isActive ? "rgba(255, 255, 255, 0.15)" : "rgba(255, 255, 255, 0.08)"}
         style={{
           padding: "28px 28px 24px",
           borderRadius: 12,
           background: isActive
-            ? "rgba(255, 255, 255, 0.12)"
-            : "rgba(255, 255, 255, 0.04)",
-          backdropFilter: "blur(12px)",
-          WebkitBackdropFilter: "blur(12px)",
+            ? "rgba(255, 255, 255, 0.14)"
+            : "rgba(255, 255, 255, 0.07)",
+          backdropFilter: "blur(16px)",
+          WebkitBackdropFilter: "blur(16px)",
           border: isActive
-            ? "1px solid rgba(255, 255, 255, 0.4)"
-            : "1px solid rgba(255, 255, 255, 0.08)",
+            ? "1px solid rgba(255, 255, 255, 0.5)"
+            : "1px solid rgba(255, 255, 255, 0.15)",
           boxShadow: isActive
-            ? "0 0 30px rgba(255, 255, 255, 0.15), 0 8px 32px rgba(0,0,0,0.3)"
-            : "0 4px 24px rgba(0, 0, 0, 0.2)",
+            ? "0 0 35px rgba(255, 255, 255, 0.18), 0 8px 32px rgba(0,0,0,0.4)"
+            : "0 6px 24px rgba(0, 0, 0, 0.3)",
           height: "100%",
           width: "100%",
         }}
@@ -238,12 +238,12 @@ const TimelineCard = ({
           fontWeight: 600,
           letterSpacing: "0.04em",
           background: isActive
-            ? "rgba(255, 255, 255, 0.25)"
-            : "rgba(255, 255, 255, 0.08)",
-          color: isActive ? "#ffffff" : "rgba(255,255,255,0.55)",
+            ? "rgba(255, 255, 255, 0.28)"
+            : "rgba(255, 255, 255, 0.12)",
+          color: isActive ? "#ffffff" : "rgba(255,255,255,0.75)",
           border: isActive
-            ? "1px solid rgba(255, 255, 255, 0.5)"
-            : "1px solid rgba(255,255,255,0.1)",
+            ? "1px solid rgba(255, 255, 255, 0.6)"
+            : "1px solid rgba(255,255,255,0.2)",
           marginBottom: 16,
         }}
       >
@@ -255,7 +255,7 @@ const TimelineCard = ({
         style={{
           fontSize: "1.35rem",
           fontWeight: 600,
-          color: isActive ? "#ffffff" : "#ffffff",
+          color: "#ffffff",
           letterSpacing: "-0.02em",
           marginBottom: 10,
           lineHeight: 1.3,
@@ -268,7 +268,7 @@ const TimelineCard = ({
       <p
         style={{
           fontSize: "0.95rem",
-          color: "rgba(255, 255, 255, 0.55)",
+          color: isActive ? "rgba(255, 255, 255, 0.9)" : "rgba(255, 255, 255, 0.75)",
           lineHeight: 1.65,
           marginBottom: 16,
         }}
@@ -280,7 +280,7 @@ const TimelineCard = ({
       <div
         style={{
           fontSize: "0.8rem",
-          color: isActive ? "#ffffff" : "rgba(255,255,255,0.35)",
+          color: isActive ? "#ffffff" : "rgba(255,255,255,0.55)",
           fontWeight: 500,
           letterSpacing: "0.02em",
           ...(isActive
@@ -288,8 +288,8 @@ const TimelineCard = ({
                 display: "inline-block",
                 padding: "4px 12px",
                 borderRadius: 8,
-                background: "rgba(255, 255, 255, 0.15)",
-                border: "1px solid rgba(255, 255, 255, 0.3)",
+                background: "rgba(255, 255, 255, 0.2)",
+                border: "1px solid rgba(255, 255, 255, 0.4)",
               }
             : {}),
         }}
@@ -325,7 +325,7 @@ export function ScrollTimeline() {
         position: "relative",
         width: "100%",
         overflow: "hidden",
-        padding: "120px 0 100px",
+        padding: "clamp(60px, 10vw, 120px) 0 clamp(60px, 8vw, 100px)",
       }}
     >
       <motion.div 
@@ -382,7 +382,7 @@ export function ScrollTimeline() {
       {/* Inject responsive styles */}
       <style dangerouslySetInnerHTML={{ __html: TIMELINE_RESPONSIVE_CSS }} />
       
-      <div style={{ maxWidth: 900, margin: "0 auto", padding: "0 24px", position: "relative", zIndex: 10 }}>
+      <div style={{ maxWidth: 900, margin: "0 auto", padding: "0 clamp(12px, 3vw, 24px)", position: "relative", zIndex: 10 }}>
         {/* Section header */}
         <div style={{ textAlign: "center", marginBottom: 64 }}>
         <div
@@ -449,7 +449,7 @@ export function ScrollTimeline() {
         ))}
 
           {/* Cards */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 64, position: "relative", zIndex: 3 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "clamp(32px, 6vw, 64px)", position: "relative", zIndex: 3 }}>
           {JOURNEY_DATA.map((entry, i) => (
             <TimelineCard
               key={i}

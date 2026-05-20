@@ -40,6 +40,15 @@ export function About() {
   const [mouseActive, setMouseActive] = useState(false);
   const [tooltipText, setTooltipText] = useState("Swipe to see");
   const [inAboutSection, setInAboutSection] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Track viewport
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   // Track whether the viewport is inside the About section
   useEffect(() => {
@@ -224,12 +233,13 @@ export function About() {
             width:         "100%",
             maxWidth:      "1400px",
             margin:        "0 auto",
-            padding:       "0 4rem",
+            padding:       isMobile ? "0 1.5rem" : "0 4rem",
             display:       "flex",
-            flexDirection: "row",
+            flexDirection: isMobile ? "column" : "row",
             alignItems:    "center",
+            justifyContent: isMobile ? "center" : "flex-start",
             boxSizing:     "border-box",
-            marginTop:     "4rem",
+            marginTop:     isMobile ? "6rem" : "4rem",
             pointerEvents: "none",
           }}
         >
@@ -239,9 +249,9 @@ export function About() {
             style={{
               flex:          "0 1 auto",
               display:       "flex",
-              flexDirection: "row",
+              flexDirection: isMobile ? "column" : "row",
               alignItems:    "center",
-              gap:           "1.5em",
+              gap:           isMobile ? "0.5em" : "1.5em",
               pointerEvents: "auto",
             }}
           >
@@ -327,9 +337,9 @@ export function About() {
         >
           <div style={{ width: "100%", height: "100%", pointerEvents: "auto" }}>
             <Lanyard
-              position={LANYARD_POSITION}
+              position={isMobile ? [0, 0, 28] : LANYARD_POSITION}
               gravity={LANYARD_GRAVITY}
-              fov={15}
+              fov={isMobile ? 20 : 15}
               onHover={(hovering) => setTooltipText(hovering ? "Grab it" : "Swipe to see")}
             />
           </div>

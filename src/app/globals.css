@@ -50,6 +50,27 @@
   /* Transitions */
   --ease-out: cubic-bezier(0.25, 0.1, 0.25, 1);
   --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Fluid spacing scale */
+  --space-xs:  clamp(0.5rem,  1vw,   1rem);
+  --space-sm:  clamp(0.75rem, 1.5vw, 1.5rem);
+  --space-md:  clamp(1rem,    2.5vw, 2.5rem);
+  --space-lg:  clamp(1.5rem,  4vw,   4rem);
+  --space-xl:  clamp(2rem,    6vw,   6rem);
+  --space-2xl: clamp(3rem,    8vw,   8rem);
+
+  /* Fluid type scale */
+  --fluid-sm:   clamp(0.8rem,  1vw,    0.95rem);
+  --fluid-base: clamp(0.9rem,  1.2vw,  1.1rem);
+  --fluid-lg:   clamp(1rem,    1.5vw,  1.35rem);
+  --fluid-xl:   clamp(1.2rem,  2vw,    1.75rem);
+  --fluid-2xl:  clamp(1.5rem,  2.5vw,  2.25rem);
+  --fluid-3xl:  clamp(1.8rem,  3.5vw,  3rem);
+  --fluid-4xl:  clamp(2.2rem,  5vw,    4.5rem);
+  --fluid-hero: clamp(2.5rem,  7vw,    6rem);
+
+  /* Section vertical rhythm */
+  --section-py: clamp(4rem, 8vh, 10rem);
 }
 
 /* ── Base ── */

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import GooeyNav from "./GooeyNav";
 
 const NAV_ITEMS = [
@@ -16,7 +16,17 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const heroThreshold = useRef(0);
+
+  // Track viewport width
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   useEffect(() => {
     // Calculate where the hero section ends
@@ -56,6 +66,7 @@ export function Navbar() {
 
   const handleNavClick = (href: string) => {
     setMenuOpen(false);
+    setMobileOpen(false);
     const el = document.querySelector(href);
     if (el) el.scrollIntoView({ behavior: "smooth" });
   };
@@ -65,10 +76,16 @@ export function Navbar() {
       <motion.nav
         layout
         onClick={() => {
-          if (collapsed && !menuOpen) setMenuOpen(true);
+          if (collapsed && !menuOpen && !mobileOpen) {
+            if (isMobile) {
+              setMobileOpen(true);
+            } else {
+              setMenuOpen(true);
+            }
+          }
         }}
         onMouseLeave={() => {
-          if (collapsed && menuOpen) setMenuOpen(false);
+          if (collapsed && menuOpen && !isMobile) setMenuOpen(false);
         }}
         style={{
           pointerEvents: "auto",
@@ -117,12 +134,13 @@ export function Navbar() {
             position: collapsed && !menuOpen ? "relative" : "absolute",
             width: 16,
             height: 16,
-            background: "#fff", // White dot is contained inside, fades out instantly
+            background: "#fff",
             borderRadius: 9999,
           }}
         />
 
-        {/* State 2: Expanded Island */}
+        {/* State 2: Expanded Island — desktop only */}
+        {!isMobile && (
         <motion.div
           layout
           animate={{ 
@@ -196,6 +214,7 @@ export function Navbar() {
             Resume
           </a>
         </motion.div>
+        )}
 
         {/* State 3: Full Navbar */}
         <motion.div
@@ -222,26 +241,133 @@ export function Navbar() {
             </a>
           </div>
 
-          <div className="navbar-center-container">
-            <GooeyNav
-              items={NAV_ITEMS}
-              particleCount={15}
-              particleDistances={[60, 10]}
-              particleR={80}
-              initialActiveIndex={0}
-              animationTime={600}
-              timeVariance={300}
-              colors={[1, 2, 3, 1, 2, 3, 1, 4]}
-            />
-          </div>
+          {/* Desktop: GooeyNav */}
+          {!isMobile && (
+            <div className="navbar-center-container">
+              <GooeyNav
+                items={NAV_ITEMS}
+                particleCount={15}
+                particleDistances={[60, 10]}
+                particleR={80}
+                initialActiveIndex={0}
+                animationTime={600}
+                timeVariance={300}
+                colors={[1, 2, 3, 1, 2, 3, 1, 4]}
+              />
+            </div>
+          )}
 
-          <div className="navbar-resume-container">
-            <a href="https://drive.google.com/file/d/1VUaWYoOHlzfcxbLtjdBqTO2nAEwV5SUw/view?usp=sharing" target="_blank" rel="noopener noreferrer" className="nav-resume">
-              Resume
-            </a>
-          </div>
+          {/* Desktop: Resume */}
+          {!isMobile && (
+            <div className="navbar-resume-container">
+              <a href="https://drive.google.com/file/d/1VUaWYoOHlzfcxbLtjdBqTO2nAEwV5SUw/view?usp=sharing" target="_blank" rel="noopener noreferrer" className="nav-resume">
+                Resume
+              </a>
+            </div>
+          )}
+
+          {/* Mobile: Hamburger toggle */}
+          {isMobile && (
+            <button
+              onClick={() => setMobileOpen(!mobileOpen)}
+              style={{
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                display: "flex",
+                flexDirection: "column",
+                gap: 5,
+                padding: 8,
+                zIndex: 1001,
+              }}
+              aria-label="Toggle menu"
+            >
+              <span style={{
+                display: "block", width: 22, height: 2, background: "#fff", borderRadius: 2,
+                transition: "transform 0.3s ease, opacity 0.2s ease",
+                transform: mobileOpen ? "rotate(45deg) translate(5px, 5px)" : "none",
+              }} />
+              <span style={{
+                display: "block", width: 22, height: 2, background: "#fff", borderRadius: 2,
+                transition: "opacity 0.2s ease",
+                opacity: mobileOpen ? 0 : 1,
+              }} />
+              <span style={{
+                display: "block", width: 22, height: 2, background: "#fff", borderRadius: 2,
+                transition: "transform 0.3s ease, opacity 0.2s ease",
+                transform: mobileOpen ? "rotate(-45deg) translate(5px, -5px)" : "none",
+              }} />
+            </button>
+          )}
         </motion.div>
       </motion.nav>
+
+      {/* Mobile slide-down drawer */}
+      <AnimatePresence>
+        {isMobile && mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            style={{
+              pointerEvents: "auto",
+              position: "fixed",
+              top: 80,
+              left: "5%",
+              right: "5%",
+              background: "rgba(10, 10, 10, 0.95)",
+              backdropFilter: "blur(24px)",
+              WebkitBackdropFilter: "blur(24px)",
+              borderRadius: 20,
+              border: "1px solid rgba(255,255,255,0.1)",
+              padding: "32px 24px",
+              display: "flex",
+              flexDirection: "column",
+              gap: 20,
+              zIndex: 999,
+              boxShadow: "0 20px 60px rgba(0,0,0,0.6)",
+            }}
+          >
+            {NAV_ITEMS.map((item) => (
+              <a
+                key={item.label}
+                href={item.href}
+                onClick={(e) => { e.preventDefault(); handleNavClick(item.href); }}
+                style={{
+                  color: "rgba(255,255,255,0.85)",
+                  fontSize: "1.1rem",
+                  fontWeight: 500,
+                  textDecoration: "none",
+                  padding: "8px 0",
+                  borderBottom: "1px solid rgba(255,255,255,0.06)",
+                  transition: "color 0.2s ease",
+                }}
+              >
+                {item.label}
+              </a>
+            ))}
+            <a
+              href="https://drive.google.com/file/d/1VUaWYoOHlzfcxbLtjdBqTO2nAEwV5SUw/view?usp=sharing"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                color: "#000",
+                background: "#fff",
+                fontSize: "0.9rem",
+                fontWeight: 600,
+                textDecoration: "none",
+                padding: "12px 24px",
+                borderRadius: 9999,
+                textAlign: "center",
+                marginTop: 8,
+              }}
+            >
+              Resume
+            </a>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

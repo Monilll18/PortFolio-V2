@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Navbar } from "@/components/Navbar";
@@ -20,6 +20,14 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
   const [preloaderDone, setPreloaderDone] = useState(false);
+
+  // Force scroll to top on reload to prevent browser from snapping to previously cached scroll positions or pinned GSAP sections
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.history.scrollRestoration = "manual";
+      window.scrollTo(0, 0);
+    }
+  }, []);
 
   return (
     <main>

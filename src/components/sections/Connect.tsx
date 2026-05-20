@@ -69,7 +69,7 @@ export function Connect() {
         display: "flex",
         flexDirection: "column",
         justifyContent: "flex-start",
-        padding: "120px 24px 0",
+        padding: "clamp(4rem, 10vh, 120px) clamp(1rem, 5vw, 24px) 0",
         textAlign: "center",
         transition: "background-color 0.4s ease, color 0.4s ease"
       }}
@@ -79,7 +79,16 @@ export function Connect() {
       </div>
 
       <PixelatedCursorTrail containerRef={sectionRef} trailColor={isDark ? "#ffffff" : "#000000"} pixelSize={6} trailSpacing={12} />
-      <CrowdCanvas src="/images/peeps/all-peeps.png" rows={15} cols={7} height="50%" paused={isDark} />
+      
+      {/* Crowd canvas pushed to bottom via mt-auto in flex-col */}
+      <div style={{ 
+        position: "absolute", bottom: 0, left: 0, width: "100%", 
+        height: "clamp(200px, 40vw, 50%)", pointerEvents: "none", zIndex: 0,
+        maskImage: "linear-gradient(to bottom, transparent 0%, black 35%)",
+        WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 35%)",
+      }}>
+        <CrowdCanvas src="/images/peeps/all-peeps.png" rows={15} cols={7} height="100%" paused={isDark} />
+      </div>
       
       <div className="connect-inner" style={{ position: "relative", zIndex: 10, width: "100%", maxWidth: "900px", margin: "0 auto" }}>
         <div className="reveal-text" style={{ position: "relative", marginBottom: "40px" }}>
@@ -113,16 +122,16 @@ export function Connect() {
           margin: "0 auto 48px",
           lineHeight: 1.6 
         }}>
-          {"My professional sketchbook. A space for technical deep-dives, product insights, and networking.".split(" ").map((word, i) => <span key={`w3-${i}`} className="reveal-word" style={{ color: isDark ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.6)", opacity: 0.1, filter: "blur(4px)", display: "inline-block", marginRight: "0.25em", transition: "color 0.4s ease" }}>{word}</span>)}
+          {"My professional sketchbook. A space for technical deep-dives, product insights, and networking.".split(" ").map((word, i) => <span key={`w3-${i}`} className="reveal-word" style={{ color: isDark ? "rgba(255,255,255,0.85)" : "rgba(0,0,0,0.85)", opacity: 0.1, filter: "blur(4px)", display: "inline-block", marginRight: "0.25em", transition: "color 0.4s ease" }}>{word}</span>)}
         </p>
 
         <div style={{ 
           display: "flex", 
-          gap: "16px", 
+          gap: "clamp(0.5rem, 2vw, 16px)", 
           justifyContent: "center", 
           alignItems: "center",
           flexWrap: "wrap",
-          marginBottom: "40px"
+          marginBottom: "clamp(1.5rem, 4vh, 40px)"
         }}>
           <SlideUpButton 
             title="GitHub" 

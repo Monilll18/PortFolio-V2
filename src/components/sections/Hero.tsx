@@ -81,13 +81,14 @@ export function Hero() {
     // ── Image sizing: Match first screenshot ──
     const imgAspect = covered.naturalWidth / covered.naturalHeight;
     const canvasAspect = w / h;
+    const isMobileView = w / (window.devicePixelRatio || 1) < 768;
 
     let drawW: number, drawH: number, drawX: number, drawY: number;
 
-    drawH = h * 0.8;
+    drawH = h * (isMobileView ? 0.65 : 0.8);
     drawW = drawH * imgAspect;
-    if (drawW > w * 0.8) {
-      drawW = w * 0.8;
+    if (drawW > w * (isMobileView ? 0.95 : 0.8)) {
+      drawW = w * (isMobileView ? 0.95 : 0.8);
       drawH = drawW / imgAspect;
     }
     drawX = (w - drawW) / 2;
@@ -382,14 +383,21 @@ export function Hero() {
       mouseRef.current.active = true;
 
       // Check if over face to hide tooltip
+      // drawX/drawY/drawW/drawH are in canvas-pixel space (CSS * DPR), convert to CSS space
       const { drawX, drawY, drawW, drawH } = layoutRef.current;
+      const dpr = window.devicePixelRatio || 1;
+      const cssDrawX = drawX / dpr;
+      const cssDrawY = drawY / dpr;
+      const cssDrawW = drawW / dpr;
+      const cssDrawH = drawH / dpr;
+
       let isOverFace = false;
-      if (drawW > 0 && drawH > 0) {
-        const relX = (mouseX - drawX) / drawW;
-        const relY = (mouseY - drawY) / drawH;
-        if (relY >= 0 && relY <= 1) {
-          const t = relY;
-          const halfWidth = getFaceContourX(t);
+      if (cssDrawW > 0 && cssDrawH > 0) {
+        const relX = (mouseX - cssDrawX) / cssDrawW;
+        const relY = (mouseY - cssDrawY) / cssDrawH;
+        // Only detect face in the head/neck region (t < 0.78), ignore shoulders/collar
+        if (relY >= 0 && relY < 0.78 && relX >= 0 && relX <= 1) {
+          const halfWidth = Math.min(getFaceContourX(relY), 0.45);
           if (Math.abs(relX - 0.5) < halfWidth) {
             isOverFace = true;
           }
