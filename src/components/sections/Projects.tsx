@@ -180,7 +180,7 @@ const PROJECTS = [
     color: "#18181b",
     image: "/images/projects/dentidoco.png",
     github: "#",
-    demo: "#",
+    demo: "https://denti-doco.vercel.app/",
   },
   {
     title: "SIS Website Redesign",
