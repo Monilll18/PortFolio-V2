@@ -198,7 +198,7 @@ export function Navbar() {
           ))}
           <div style={{ width: "1px", height: "20px", background: "rgba(255,255,255,0.15)" }} />
           <a
-            href="https://docs.google.com/document/d/1ICmXZJvYGRyh0kbbta3Vuw0ZM9GvKuqa/edit?usp=drivesdk&ouid=115470715089010375285&rtpof=true&sd=true"
+            href="https://drive.google.com/file/d/1IV3o6TXVF4Hc1TKBnol83JO3TaUztqg3/view"
             target="_blank"
             rel="noopener noreferrer"
             style={{
@@ -260,7 +260,7 @@ export function Navbar() {
           {/* Desktop: Resume */}
           {!isMobile && (
             <div className="navbar-resume-container">
-              <a href="https://docs.google.com/document/d/1ICmXZJvYGRyh0kbbta3Vuw0ZM9GvKuqa/edit?usp=drivesdk&ouid=115470715089010375285&rtpof=true&sd=true" target="_blank" rel="noopener noreferrer" className="nav-resume">
+              <a href="https://drive.google.com/file/d/1IV3o6TXVF4Hc1TKBnol83JO3TaUztqg3/view" target="_blank" rel="noopener noreferrer" className="nav-resume">
                 Resume
               </a>
             </div>
@@ -348,7 +348,7 @@ export function Navbar() {
               </a>
             ))}
             <a
-              href="https://docs.google.com/document/d/1ICmXZJvYGRyh0kbbta3Vuw0ZM9GvKuqa/edit?usp=drivesdk&ouid=115470715089010375285&rtpof=true&sd=true"
+              href="https://drive.google.com/file/d/1IV3o6TXVF4Hc1TKBnol83JO3TaUztqg3/view"
               target="_blank"
               rel="noopener noreferrer"
               style={{
